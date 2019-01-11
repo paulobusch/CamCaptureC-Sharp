@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câmeras de segurança</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/Site.css" rel="stylesheet" />
+
+    <style>
+        .row{
+            margin-top: 50px;
+        }
+        #someId .thumbnail{
+            display: inline-flex;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Câmeras de segurança</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="about.html">Sobre</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+
+        <div class="row" id="images">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img id="foto" src="img/foto.jpg" class="img-thumbnail" alt="Foto" />
+                    <div class="caption">
+                        <h4>Autor</h4>
+                        <p>
+                            Paulo Ricardo Busch nascido em 01/02/2000, estudou no Colégio Estadual Frederico Guilherme
+                            Giese e recentemente ingressou na Universidade Tecnológica Federal do Paraná – UTFPR, para
+                            o curso de Engenharia de Software. Chegou a trabalhar 2 anos na empresa Arauco do Brasil
+                            como jovem aprendiz no setor de Engenharia de Manutenção.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; <span id="year"></span> - Desenvolvido por Paulo Ricardo Busch</p>
+        </footer>
+    </div>
+
+    <script src="js/modernizr-2.8.3.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/mustache.min.js"></script>
+</body>
+
+</html>
