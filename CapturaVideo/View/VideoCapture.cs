@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-using CapturaVideo.Classes;
+using CapturaVideo.Model;
 using CapturaVideo.Janelas;
 using CapturaVideo.Model;
 using WebServer.Models;
+using DirectX.Capture;
 
 namespace CapturaVideo
 {

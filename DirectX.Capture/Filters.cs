@@ -36,8 +36,9 @@ namespace DirectX.Capture
 		/// <summary> Collection of available video capture devices. </summary>
 		public FilterCollection VideoInputDevices = new FilterCollection( FilterCategory.VideoInputDevice ); 
 
+        //TODO: Use audio mode
 		/// <summary> Collection of available audio capture devices. </summary>
-		public FilterCollection AudioInputDevices = new FilterCollection( FilterCategory.AudioInputDevice ); 
+		//public FilterCollection AudioInputDevices = new FilterCollection( FilterCategory.AudioInputDevice ); 
 
 		/// <summary> Collection of available video compressors. </summary>
 		public FilterCollection VideoCompressors = new FilterCollection( FilterCategory.VideoCompressorCategory ); 

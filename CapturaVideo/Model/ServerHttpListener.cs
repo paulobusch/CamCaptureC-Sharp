@@ -4,7 +4,7 @@ using System.Threading;
 using System.Linq;
 using System.Text;
 using System.IO;
-using CapturaVideo.Classes;
+using CapturaVideo.Model;
 using Newtonsoft.Json;
 using System.Net.Sockets;
 
@@ -52,7 +52,7 @@ namespace CapturaVideo.Model
                 //GET files
                 default:
                     var path = !string.IsNullOrEmpty(baseUrl) ? baseUrl : "index.html";
-                    return File.ReadAllBytes($@"{Consts.CURRENT_PATH}\web_pages\{path}");
+                    return File.ReadAllBytes($@"{Consts.CURRENT_PATH}\{Consts.WEB_PATH}\{path}");
             }
         }
         public ServerHttpListener(string[] prefixes, Func<HttpListenerRequest, byte[]> method)

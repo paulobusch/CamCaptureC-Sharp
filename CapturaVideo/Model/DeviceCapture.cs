@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using CapturaVideo.Model;
 using DirectX.Capture;
 
-namespace CapturaVideo.Classes
+namespace CapturaVideo.Model
 {
     internal class DeviceCapture
     {
@@ -78,8 +78,7 @@ namespace CapturaVideo.Classes
         }
         public void UpdateConfiguration()
         {
-            if(_legend != null)
-                _legend.CalcPosition();
+            _legend?.CalcPosition();
         }
         #endregion
 
@@ -118,16 +117,14 @@ namespace CapturaVideo.Classes
 
             if (this.key == DeviceController.selected_device)
             {
-                if (DeviceController.image_grid.Image != null)
-                    DeviceController.image_grid.Image.Dispose();
+                DeviceController.image_grid.Image?.Dispose();
                 DeviceController.image_grid.Image = (Image)bmp.Clone();
                 DeviceController.image_state.BackColor = (_video?.recording ?? false) ? Color.Red : Color.Green;
             }
 
             lock (process_image)
             {
-                if (process_image != null)
-                    process_image.Dispose();
+                process_image?.Dispose();
                 process_image = (Image)bmp.Clone();
             }
 

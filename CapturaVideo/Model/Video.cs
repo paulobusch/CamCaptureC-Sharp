@@ -5,7 +5,7 @@ using System.Diagnostics;
 using CapturaVideo.Model;
 using AForge.Video.FFMPEG;
 
-namespace CapturaVideo.Classes
+namespace CapturaVideo.Model
 {
     public class Video
     {
@@ -28,7 +28,7 @@ namespace CapturaVideo.Classes
         public void StartRecording()
         {
             _writer = new VideoFileWriter();
-            _writer.Open($"{Configuration.path_save_video}{_id_name}_{DateTime.Now.ToString("hhmmss")}_.avi",
+            _writer.Open($"{Configuration.path_save_video}{DateTime.Now.ToString("yyyy-MM-dd HHmm")}-{_id_name}_.avi",
                 _resolution.Width, _resolution.Height, Configuration.frame_rate, VideoCodec.MPEG4, Configuration.bit_rate);
             _start_record = DateTime.Now;
             recording = true;
@@ -67,7 +67,7 @@ namespace CapturaVideo.Classes
             var process = new Process {
                 StartInfo =
                 {
-                    FileName = $@"{Consts.CURRENT_PATH}\ffmpeg_compress\compressFiles.bat",
+                    FileName = $@"{Consts.CURRENT_PATH}\{Consts.FFMPEG_PATH}\compressFiles.bat",
                     Arguments = $"\"{Configuration.path_save_video}*_.avi\" \"{Consts.CURRENT_PATH}\"",//filter media - source
                     UseShellExecute = false,
                     CreateNoWindow = true,

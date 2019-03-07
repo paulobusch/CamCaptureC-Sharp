@@ -1,4 +1,4 @@
-﻿using CapturaVideo.Classes;
+﻿using CapturaVideo.Model;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -10,7 +10,7 @@ namespace CapturaVideo.Model
         TopRight = 0,
         TopLeft = 1,
         BottonRight = 2,
-        BottonLeft = 3,
+        BottonLeft = 3
     }
     public class Legend
     {

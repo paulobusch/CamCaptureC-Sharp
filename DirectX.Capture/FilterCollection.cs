@@ -26,7 +26,7 @@ namespace DirectX.Capture
 		/// <summary> Populate the collection with a list of filters from a particular category. </summary>
 		internal FilterCollection(Guid category)
 		{
-			getFilters( category );
+			 getFilters( category );
 		}
 
 		/// <summary> Populate the InnerList with a list of filters from a particular category </summary>
@@ -49,8 +49,8 @@ namespace DirectX.Capture
 
 				// Create an enumerator to find filters in category
 				hr = enumDev.CreateClassEnumerator( ref category, out enumMon, 0 );
-				if( hr != 0 )
-					throw new NotSupportedException( "No devices of the category" );
+				//if( hr != 0 )
+				//	throw new NotSupportedException( "No devices of the category" );
 
 				// Loop through the enumerator
 				int f;

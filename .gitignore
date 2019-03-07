@@ -1,0 +1,15 @@
+.vs/
+
+Installer/
+packages/
+SetupInstaller/
+
+CapturaVideo/obj/
+CapturaVideo/bin/
+
+DShowNET/bin/
+DShowNET/obj/
+
+DirectX.Capture/bin/
+DirectX.Capture/obj/
+

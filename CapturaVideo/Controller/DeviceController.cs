@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WebServer.Models;
 
-namespace CapturaVideo.Classes
+namespace CapturaVideo.Model
 {
     internal static class DeviceController
     {
@@ -38,9 +38,13 @@ namespace CapturaVideo.Classes
             devices_capture = new Dictionary<int, DeviceCapture>();
             devices = new List<Filter>();
 
+            //check infraestructure
+            //new SqLite().CreateTablesIfNotExists();
+
             //define devices
+            var filtro = new Filters();
             Configuration.LoadConfiguration();
-            foreach (Filter cam in new Filters().VideoInputDevices)
+            foreach (Filter cam in filtro.VideoInputDevices)
                 devices.Add(cam);
 
             //init controls interface
@@ -171,7 +175,7 @@ namespace CapturaVideo.Classes
         public static DeviceState GetStateCurrentDevice()
         {
             var dev = GetDevice(selected_device);
-            return dev != null ? dev.GetDeviceState() : DeviceState.Stoped;
+            return dev?.GetDeviceState() ?? DeviceState.Stoped;
         }
         public static DeviceCapture GetDevice(int key) {
             DeviceCapture ret;

@@ -1,4 +1,4 @@
-﻿using CapturaVideo.Classes;
+﻿using CapturaVideo.Model;
 using CapturaVideo.Model;
 using System;
 using System.Drawing;

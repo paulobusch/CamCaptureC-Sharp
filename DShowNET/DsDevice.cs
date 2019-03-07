@@ -33,8 +33,8 @@ namespace DShowNET.Device
 				comObj = Activator.CreateInstance( srvType );
 				enumDev = (ICreateDevEnum) comObj;
 				hr = enumDev.CreateClassEnumerator( ref cat, out enumMon, 0 );
-				if( hr != 0 )
-					throw new NotSupportedException( "No devices of the category" );
+				//if( hr != 0 )
+				//	throw new NotSupportedException( "No devices of the category" );
 
 				int f, count = 0;
 				do

@@ -2,7 +2,7 @@
 using DirectX.Capture;
 using System.Drawing;
 
-namespace CapturaVideo.Classes
+namespace CapturaVideo.Model
 {
     public class DeviceInterface
     {

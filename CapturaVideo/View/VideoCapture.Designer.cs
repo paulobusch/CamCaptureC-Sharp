@@ -1,4 +1,4 @@
-﻿using CapturaVideo.Classes;
+﻿using CapturaVideo.Model;
 
 namespace CapturaVideo
 {
