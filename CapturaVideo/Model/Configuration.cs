@@ -1,4 +1,5 @@
 ﻿using CapturaVideo.Model;
+using CapturaVideo.Model.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -25,7 +26,7 @@ namespace CapturaVideo.Model
         public static int bit_rate = 100000;
         public static bool compress_video = false;
         public static bool show_date_time = false;
-        public static LegendAlign legend_align = LegendAlign.BottonRight;
+        public static ELegendAlign legend_align = ELegendAlign.BottonRight;
         public static Font font = new Font("Arial", 10);
 
         //Dictionary<MonikerString, FrameSize>
@@ -103,7 +104,7 @@ namespace CapturaVideo.Model
                 bit_rate = obj.GetValue("bit_rate").Value<int>();
                 compress_video = obj.GetValue("compress_video").Value<bool>();
                 show_date_time = obj.GetValue("show_date_time").Value<bool>();
-                legend_align = (LegendAlign)obj.GetValue("legend_align").Value<int>();
+                legend_align = (ELegendAlign)obj.GetValue("legend_align").Value<int>();
                 font = new Font(obj.GetValue("font_family").Value<string>(), obj.GetValue("font_size").Value<int>());
 
                 devices_config = JsonConvert.DeserializeObject<Dictionary<string, Size>>(obj.GetValue("devices_config").ToString());

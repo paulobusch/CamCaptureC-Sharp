@@ -1,4 +1,5 @@
 ﻿using CapturaVideo.Model;
+using CapturaVideo.Model.Enums;
 using DirectX.Capture;
 using System;
 using System.Collections.Generic;
@@ -146,13 +147,13 @@ namespace CapturaVideo.Model
 
             LoadDevice();
         }
-        public static void ChangeAllIconState(DeviceState st)
+        public static void ChangeAllIconState(EDeviceState st)
         {
             var stInt = (int)st;
             foreach (ListViewItem item in list_view_devices.Items)
                 item.ImageIndex = stInt;
         }
-        public static void ChangeIconState(int key, DeviceState st)
+        public static void ChangeIconState(int key, EDeviceState st)
         {
             foreach (ListViewItem item in list_view_devices.Items)
             {
@@ -172,10 +173,10 @@ namespace CapturaVideo.Model
                 foreach (KeyValuePair<int, DeviceCapture> dev in devices_capture)
                     task(dev);
         }
-        public static DeviceState GetStateCurrentDevice()
+        public static EDeviceState GetStateCurrentDevice()
         {
             var dev = GetDevice(selected_device);
-            return dev?.GetDeviceState() ?? DeviceState.Stoped;
+            return dev?.GetDeviceState() ?? EDeviceState.Stoped;
         }
         public static DeviceCapture GetDevice(int key) {
             DeviceCapture ret;
@@ -191,12 +192,12 @@ namespace CapturaVideo.Model
         }
         public static void StartAllDevices() {
             IterateDevices(x => x.Value.StartDevice());
-            ChangeAllIconState(DeviceState.Runing);
+            ChangeAllIconState(EDeviceState.Runing);
         }
         public static void StopAllDevices(bool refreshIcons = true) {
             IterateDevices(x => x.Value.StopDevice());
             if(refreshIcons)
-                ChangeAllIconState(DeviceState.Stoped);
+                ChangeAllIconState(EDeviceState.Stoped);
         }
         public static void LoadDevice()
         {
@@ -243,15 +244,15 @@ namespace CapturaVideo.Model
                 x.Value.StopVideo();
                 x.Value.StartVideo();
             });
-            ChangeAllIconState(DeviceState.Recording);
+            ChangeAllIconState(EDeviceState.Recording);
         }
         public static void StartAllVideo() {
             IterateDevices(x => x.Value.StartVideo());
-            ChangeAllIconState(DeviceState.Recording);
+            ChangeAllIconState(EDeviceState.Recording);
         }
         public static void StopAllVideo() {
             IterateDevices(x => x.Value.StopVideo());
-            ChangeAllIconState(DeviceState.Runing);
+            ChangeAllIconState(EDeviceState.Runing);
         }
         #endregion
 

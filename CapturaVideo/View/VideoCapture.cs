@@ -8,6 +8,7 @@ using CapturaVideo.Janelas;
 using CapturaVideo.Model;
 using WebServer.Models;
 using DirectX.Capture;
+using CapturaVideo.Model.Enums;
 
 namespace CapturaVideo
 {
@@ -86,8 +87,8 @@ namespace CapturaVideo
             var state = DeviceController.GetStateCurrentDevice();
             bool selected = list_view_devices.SelectedItems.Count > 0;
 
-            bool runing = state != DeviceState.Stoped;            
-            bool recording = state == DeviceState.Recording;
+            bool runing = state != EDeviceState.Stoped;            
+            bool recording = state == EDeviceState.Recording;
 
             //lateral buttons
             btn_tools.Enabled = selected;
@@ -107,7 +108,7 @@ namespace CapturaVideo
             //define values attributs
             bool runing = DeviceController.device_interface.font?.Running ?? false;
             var key = (int)list_view_devices.SelectedItems[0].Tag;
-            bool recording = DeviceController.GetDevice(key).GetDeviceState() == DeviceState.Recording;
+            bool recording = DeviceController.GetDevice(key).GetDeviceState() == EDeviceState.Recording;
 
             //enable buttons menu
             tool_strip_start_font.Enabled = !runing;
@@ -156,7 +157,7 @@ namespace CapturaVideo
         {
             ActionDevice(x => {
                 x.StartDevice();
-                return DeviceState.Runing;
+                return EDeviceState.Runing;
             });
         }
 
@@ -164,7 +165,7 @@ namespace CapturaVideo
         {
             ActionDevice(x => {
                 x.StopDevice();
-                return DeviceState.Stoped;
+                return EDeviceState.Stoped;
             });
         }
 
@@ -172,7 +173,7 @@ namespace CapturaVideo
         {
             ActionDevice(x => {
                 x.StartVideo();
-                return DeviceState.Recording;
+                return EDeviceState.Recording;
             });
         }
 
@@ -180,7 +181,7 @@ namespace CapturaVideo
         {
             ActionDevice(x => {
                 x.StopVideo();
-                return DeviceState.Runing;
+                return EDeviceState.Runing;
             });
         }
         #endregion
@@ -224,7 +225,7 @@ namespace CapturaVideo
 
         #region Menu Device
         //methods controls
-        private void ActionDevice(Func<DeviceCapture, DeviceState> task)
+        private void ActionDevice(Func<DeviceCapture, EDeviceState> task)
         {
             int key;
             if(list_view_devices.SelectedItems.Count > 0)
@@ -250,28 +251,28 @@ namespace CapturaVideo
         private void tool_strip_start_font_Click(object sender, EventArgs e) {
             ActionDevice(x => {
                 x.StartDevice();
-                return DeviceState.Runing;
+                return EDeviceState.Runing;
             });
         }
         private void tool_strip_stop_font_Click(object sender, EventArgs e)
         {
             ActionDevice(x => {
                 x.StopDevice();
-                return DeviceState.Stoped;
+                return EDeviceState.Stoped;
             });
         }
         private void tool_strip_start_video_Click(object sender, EventArgs e)
         {
             ActionDevice(x => {
                 x.StartVideo();
-                return DeviceState.Recording;
+                return EDeviceState.Recording;
             });
         }
         private void tool_strip_stop_video_Click(object sender, EventArgs e)
         {
             ActionDevice(x => {
                 x.StopVideo();
-                return DeviceState.Runing;
+                return EDeviceState.Runing;
             });
         }
         private void tool_strip_capture_Click(object sender, EventArgs e)

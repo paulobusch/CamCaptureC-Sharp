@@ -1,5 +1,6 @@
 ﻿using CapturaVideo.Model;
 using CapturaVideo.Model;
+using CapturaVideo.Model.Enums;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -111,39 +112,39 @@ namespace CapturaVideo
         #endregion
 
         #region Legend Align
-        public void SetAlign(LegendAlign align)
+        public void SetAlign(ELegendAlign align)
         {
-            chk_top_left.Checked = align == LegendAlign.TopLeft;
-            chk_top_right.Checked = align == LegendAlign.TopRight;
-            chk_botton_left.Checked = align == LegendAlign.BottonLeft;
-            chk_botton_right.Checked = align == LegendAlign.BottonRight;
+            chk_top_left.Checked = align == ELegendAlign.TopLeft;
+            chk_top_right.Checked = align == ELegendAlign.TopRight;
+            chk_botton_left.Checked = align == ELegendAlign.BottonLeft;
+            chk_botton_right.Checked = align == ELegendAlign.BottonRight;
         }
-        public LegendAlign GetAlign()
+        public ELegendAlign GetAlign()
         {
             if (chk_top_left.Checked)
-                return LegendAlign.TopLeft;
+                return ELegendAlign.TopLeft;
             if (chk_top_right.Checked)
-                return LegendAlign.TopRight;
+                return ELegendAlign.TopRight;
             if (chk_botton_left.Checked)
-                return LegendAlign.BottonLeft;
+                return ELegendAlign.BottonLeft;
 
-            return LegendAlign.BottonRight;
+            return ELegendAlign.BottonRight;
         }
         private void chk_top_left_Click(object sender, EventArgs e)
         {
-            SetAlign(LegendAlign.TopLeft);
+            SetAlign(ELegendAlign.TopLeft);
         }
         private void chk_top_right_Click(object sender, EventArgs e)
         {
-            SetAlign(LegendAlign.TopRight);
+            SetAlign(ELegendAlign.TopRight);
         }
         private void chk_botton_right_Click(object sender, EventArgs e)
         {
-            SetAlign(LegendAlign.BottonRight);
+            SetAlign(ELegendAlign.BottonRight);
         }
         private void chk_botton_left_Click(object sender, EventArgs e)
         {
-            SetAlign(LegendAlign.BottonLeft);
+            SetAlign(ELegendAlign.BottonLeft);
         }
         #endregion
 

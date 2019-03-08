@@ -1,17 +1,11 @@
 ﻿using CapturaVideo.Model;
+using CapturaVideo.Model.Enums;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace CapturaVideo.Model
 {
-    public enum LegendAlign
-    {
-        TopRight = 0,
-        TopLeft = 1,
-        BottonRight = 2,
-        BottonLeft = 3
-    }
     public class Legend
     {
         private Point _location;
@@ -32,19 +26,19 @@ namespace CapturaVideo.Model
 
             switch (Configuration.legend_align)
             {
-                case LegendAlign.TopLeft:
+                case ELegendAlign.TopLeft:
                     _location.X = Consts.LOCATION.X;
                     _location.Y = Consts.LOCATION.Y;
                     break;
-                case LegendAlign.TopRight:
+                case ELegendAlign.TopRight:
                     _location.X = _size.Width - (Consts.LOCATION.X + width);
                     _location.Y = Consts.LOCATION.Y;
                     break;
-                case LegendAlign.BottonLeft:
+                case ELegendAlign.BottonLeft:
                     _location.X = Consts.LOCATION.X;
                     _location.Y = _size.Height - (Consts.LOCATION.Y + height);
                     break;
-                case LegendAlign.BottonRight:
+                case ELegendAlign.BottonRight:
                     _location.X = _size.Width - (Consts.LOCATION.X + width);
                     _location.Y = _size.Height - (Consts.LOCATION.Y + height);
                     break;
