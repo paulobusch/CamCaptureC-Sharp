@@ -40,7 +40,8 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>cam.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -166,8 +167,6 @@
     <None Include="Resources\image1.png" />
     <None Include="Resources\image.png" />
     <None Include="bin\Debug\web_pages\img\foto.jpg" />
-    <Content Include="cam.ico" />
-    <Content Include="icon.ico" />
     <None Include="Resources\info.png" />
     <None Include="Resources\video_stop1.png" />
     <None Include="Resources\save.png" />
