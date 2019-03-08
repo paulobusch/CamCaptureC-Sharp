@@ -69,6 +69,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\AForge.Video.FFMPEG.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.40\lib\net35\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="DirectX.Capture">
       <HintPath>..\DirectX.Capture\bin\Debug\DirectX.Capture.dll</HintPath>
     </Reference>
@@ -96,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\DataTable.cs" />
+    <Compile Include="Model\Enums\ELegendAlign.cs" />
     <Compile Include="Model\SqlLite.cs" />
     <Compile Include="View\About.cs">
       <SubType>Form</SubType>
@@ -109,7 +113,7 @@
     <Compile Include="Model\DeviceCapture.cs" />
     <Compile Include="Controller\DeviceController.cs" />
     <Compile Include="Model\DeviceInterface.cs" />
-    <Compile Include="Model\DeviceState.cs" />
+    <Compile Include="Model\Enums\EDeviceState.cs" />
     <Compile Include="Model\Helpers.cs" />
     <Compile Include="Model\LegendAlign.cs" />
     <Compile Include="Model\Log.cs" />
