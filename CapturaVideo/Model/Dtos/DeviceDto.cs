@@ -2,6 +2,7 @@
 
 namespace CapturaVideo.Model.Dtos {
     public class DeviceDto {
+        public int ConfigurationId { get; set; }
         public string MonikerString { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }

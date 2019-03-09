@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -16,7 +16,7 @@ namespace CapturaVideo.Model
 {
     public static class Configuration
     {
-        public static ConfigurationDto Data { get; set; }
+        public static ConfigurationDto Data = new ConfigurationDto();
 
         //device
         public static int time_interval = 5;
@@ -41,14 +41,9 @@ namespace CapturaVideo.Model
 
         //config
         private static string _path_name_config = $@"{Consts.CURRENT_PATH}\{Consts.NAME_FILE_CONFIG}";
-        //private static string _table_name = "configuration";
-
-        // Database
-        private static string _connectionString = $@"Data Source={Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}; Version=3;";
-
 
         public static void LoadConfiguration(){
-            // Check
+            // Check database
             if (!SqLite.DatabaseExists()) {
                 SqLite.CreateDatabase();
                 SaveConfiguration();
@@ -116,7 +111,7 @@ namespace CapturaVideo.Model
 
                 start_window = obj.GetValue("start_window").Value<bool>();
                 start_window_minimized = obj.GetValue("start_window_minimized").Value<bool>();
-            }catch (System.Exception){
+            }catch (Exception){
                 MessageBox.Show("Falha ao carregar as configurações!", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -126,63 +121,72 @@ namespace CapturaVideo.Model
         {
             try
             {
-                //var config = new
-                //{
-                //    time_interval,
-                //    enable_interval,
-                //    enable_server,
-                //    path_save_video,
-                //    frame_rate,
-                //    bit_rate,
-                //    compress_video,
-                //    show_date_time,
-                //    legend_align = (int)legend_align,
-                //    font_family = font.FontFamily.Name,
-                //    font_size = font.Size,
+                var sqlInsertConfiguration = @"
+                    update configuration set IsLast=0 where IsLast=1;
 
-                //    //devices
-                //    devices_config = JsonConvert.SerializeObject(DeviceController.BindDeviceConfiguration()),
+                    insert into configuration(TimeInterval,
+                    EnableInterval,EnableServer,EnableCompressVideo,ViewDateTime,
+                    PathSaveVideo,FrameRate,BitRate,LegendAlign,FontFamily,FontSize,
+                    EnableStart,EnableStartMinimized,DateTime,IsLast)
 
-                //    start_window,
-                //    start_window_minimized,
-                //    date_time = DateTime.Now,
-                //    is_last = true
-                //};
+                    values(@TimeInterval,@EnableInterval,@EnableServer,@EnableCompressVideo,
+                    @ViewDateTime,@PathSaveVideo,@FrameRate,@BitRate,@LegendAlign,
+                    @FontFamily,@FontSize,@EnableStart,@EnableStartMinimized,@DateTime,@IsLast);
 
-                //var db = new SqLite();
-                //db.Open();
-                //db.Update(new SqlLiteData(new { is_last = false }, _table_name));
-                //db.Save(new SqlLiteData(config, _table_name));
-                //db.Close();
+                    select last_insert_rowid();";
 
-                string configJson = JsonConvert.SerializeObject(new
-                {
-                    time_interval,
-                    enable_interval,
-                    enable_server,
-                    path_save_video,
-                    frame_rate,
-                    bit_rate,
-                    compress_video,
-                    show_date_time,
-                    legend_align,
-                    font_family = font.FontFamily.Name,
-                    font_size = font.Size,
+                var sqlInsertDevices = @"insert into devices values (@ConfigurationId,@MonikerString,@Width,@Height);";
 
-                    //devices
-                    devices_config = DeviceController.BindDeviceConfiguration(),
+                using (var cnn = SqLite.NewConnection()) {
+                    cnn.Open();
 
-                    start_window,
-                    start_window_minimized
-                });
+                    // Configuration
+                    using (var command = new SQLiteCommand(sqlInsertConfiguration, cnn)) {
+                        command.Parameters.Add("TimeInterval", DbType.Int32).Value = Data.TimeInterval;
+                        command.Parameters.Add("EnableInterval", DbType.Boolean).Value = Data.EnableInterval;
+                        command.Parameters.Add("EnableServer", DbType.Boolean).Value = Data.EnableServer;
+                        command.Parameters.Add("EnableCompressVideo", DbType.Boolean).Value = Data.EnableCompressVideo;
+                        command.Parameters.Add("ViewDateTime", DbType.Boolean).Value = Data.ViewDateTime;
+                        command.Parameters.Add("PathSaveVideo", DbType.String).Value = Data.PathSaveVideo;
+                        command.Parameters.Add("FrameRate", DbType.Int32).Value = Data.FrameRate;
+                        command.Parameters.Add("BitRate", DbType.Int32).Value = Data.BitRate;
+                        command.Parameters.Add("LegendAlign", DbType.Int32).Value = Data.LegendAlign;
+                        command.Parameters.Add("FontFamily", DbType.String).Value = Data.FontFamily;
+                        command.Parameters.Add("FontSize", DbType.Int32).Value = Data.FontSize;
+                        command.Parameters.Add("EnableStart", DbType.Boolean).Value = Data.EnableStart;
+                        command.Parameters.Add("EnableStartMinimized", DbType.Boolean).Value = Data.EnableStartMinimized;
+                        command.Parameters.Add("DateTime", DbType.DateTime).Value = DateTime.Now;
+                        command.Parameters.Add("IsLast", DbType.Boolean).Value = true;
+                        Data.Id = Convert.ToInt32(command.ExecuteScalar());
+                    }
 
-                using (StreamWriter file = new StreamWriter(_path_name_config, false, Encoding.Unicode))
-                {
-                    file.WriteLine(configJson);
-                    file.Close();
+                    // Devices
+                    if (Data.Devices == null || Data.Devices.Count == 0)
+                        return;
+                    using (var command = new SQLiteCommand(sqlInsertDevices, cnn)) {
+                        SQLiteParameter ConfigurationId = new SQLiteParameter("ConfigurationId", DbType.Int32); 
+                        SQLiteParameter MonikerString = new SQLiteParameter("MonikerString", DbType.String); 
+                        SQLiteParameter Width = new SQLiteParameter("Width", DbType.String); 
+                        SQLiteParameter Height = new SQLiteParameter("Height", DbType.String);
+
+                        command.Parameters.Add(ConfigurationId);
+                        command.Parameters.Add(MonikerString);
+                        command.Parameters.Add(Width);
+                        command.Parameters.Add(Height);
+
+                        ConfigurationId.Value = Data.Id;
+
+                        foreach (var device in Data.Devices) {
+                            MonikerString.Value = device.MonikerString;
+                            Width.Value = device.Width;
+                            Height.Value = device.Height;
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
-            catch (System.Exception){
+            catch (Exception ex){
                 MessageBox.Show("Falha ao salvar configurações!", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);

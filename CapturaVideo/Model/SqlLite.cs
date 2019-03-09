@@ -31,13 +31,16 @@ namespace CapturaVideo.Model {
 	                FontSize integer,
 	                EnableStart bit,
 	                EnableStartMinimized bit,
-	                Devices string
+                    DateTime datetime,
+                    IsLast bit
                 );
 
                 create table devices(
+	                ConfigurationId integer,
 	                MonikerString varchar(100),
 	                Width integer,
-	                Height integer
+	                Height integer,
+	                foreign key(ConfigurationId) references configuration(Id)
                 );";
 
             using (var cnn = NewConnection()) {
