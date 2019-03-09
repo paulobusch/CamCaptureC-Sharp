@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -21,7 +19,7 @@ namespace CapturaVideo.Model
         public const string NAME_FILE_CONFIG = @"config.ini";
 
         //video
-        public static string CURRENT_PATH = Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory.ToString());
+        public static string CURRENT_PATH = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString());
         public static Color[] COLORS = { Color.White, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.Purple, };
         public static int[] FONT_SIZE = { 6, 8, 10, 12, 16, 18, 20, 24, 30, 36 };
         public static Size[] RESOLUTION = new Size[] {

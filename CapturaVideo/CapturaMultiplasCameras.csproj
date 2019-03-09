@@ -98,7 +98,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DataTable.cs" />
     <Compile Include="Model\Dtos\ConfigurationDto.cs" />
     <Compile Include="Model\Dtos\DeviceDto.cs" />
     <Compile Include="Model\Enums\ELegendAlign.cs" />

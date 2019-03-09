@@ -3,11 +3,13 @@
 namespace CapturaVideo.Model.Dtos {
     public class DeviceDto {
         public string MonikerString { get; set; }
-        public Size Size { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
 
         public DeviceDto() {
             this.MonikerString = null;
-            this.Size = new Size();
+            this.Width = 640;
+            this.Height = 180;
         }
     }
 }

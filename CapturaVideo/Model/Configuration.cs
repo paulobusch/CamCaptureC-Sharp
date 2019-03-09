@@ -1,4 +1,5 @@
 ﻿using CapturaVideo.Model;
+using CapturaVideo.Model.Dtos;
 using CapturaVideo.Model.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,6 +16,8 @@ namespace CapturaVideo.Model
 {
     public static class Configuration
     {
+        public static ConfigurationDto Data { get; set; }
+
         //device
         public static int time_interval = 5;
         public static bool enable_interval = false;
@@ -40,17 +43,19 @@ namespace CapturaVideo.Model
         private static string _path_name_config = $@"{Consts.CURRENT_PATH}\{Consts.NAME_FILE_CONFIG}";
         //private static string _table_name = "configuration";
 
-        //database
-        //private static string _connectionString = $@"Data Source={Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}; Version=3;";
+        // Database
+        private static string _connectionString = $@"Data Source={Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}; Version=3;";
+
 
         public static void LoadConfiguration(){
-            //check
-            if (!File.Exists(_path_name_config)){
+            // Check
+            if (!SqLite.DatabaseExists()) {
+                SqLite.CreateDatabase();
                 SaveConfiguration();
                 return;
             }
 
-            //load
+            // Load
             string configJson = string.Empty;
             using (StreamReader reader = new StreamReader(_path_name_config, Encoding.Unicode)) {
                 while (!reader.EndOfStream)
