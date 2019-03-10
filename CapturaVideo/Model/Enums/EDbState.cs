@@ -1,6 +1,8 @@
 ﻿namespace CapturaVideo.Model.Enums {
     public enum EDbState {
-        Changed = 0,
-        Unchanged = 1
+        Unchanged = 0,
+        Create = 1,
+        Update = 2,
+        Delete = 3,
     }
 }

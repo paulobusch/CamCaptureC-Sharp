@@ -17,7 +17,7 @@ namespace CapturaVideo.Model.Dtos {
         public int FontSize { get; set; }
         public bool EnableStart { get; set; }
         public bool EnableStartMinimized { get; set; }
-        public List<DeviceDto> Devices { get; set; }
+        public IEnumerable<DeviceDto> Devices { get; set; }
 
         public ConfigurationDto() {
             // Device

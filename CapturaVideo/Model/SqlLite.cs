@@ -17,30 +17,30 @@ namespace CapturaVideo.Model {
 
             var sqlCreateTables = @"
                 create table configuration(
-	                Id integer primary key autoincrement,
-	                TimeInterval integer,
-	                EnableInterval bit,
-	                EnableServer bit,
-	                EnableCompressVideo bit,
-	                ViewDateTime bit,
-	                PathSaveVideo varchar(1000),
-	                FrameRate integer,
-	                BitRate integer,
-	                LegendAlign integer,
-	                FontFamily varchar(50),
-	                FontSize integer,
-	                EnableStart bit,
-	                EnableStartMinimized bit,
-                    DateTime datetime,
-                    IsLast bit
+	                id integer primary key autoincrement,
+	                time_interval integer,
+	                enable_interval bit,
+	                enable_server bit,
+	                enable_compress_video bit,
+	                view_date_time bit,
+	                path_save_video varchar(1000),
+	                frame_rate integer,
+	                bit_rate integer,
+	                legend_align integer,
+	                font_family varchar(50),
+	                font_size integer,
+	                enable_start bit,
+	                enable_start_minimized bit,
+                    date_time date_time,
+                    is_last bit
                 );
 
                 create table devices(
-	                ConfigurationId integer,
-	                MonikerString varchar(100),
-	                Width integer,
-	                Height integer,
-	                foreign key(ConfigurationId) references configuration(Id)
+	                moniker_string varchar(100) primary key,
+	                id_configuration integer,
+	                width integer,
+	                height integer,
+	                foreign key(id_configuration) references configuration(id)
                 );";
 
             using (var cnn = NewConnection()) {
