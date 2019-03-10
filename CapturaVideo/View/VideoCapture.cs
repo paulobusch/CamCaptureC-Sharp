@@ -204,7 +204,14 @@ namespace CapturaVideo
         }
         private void configuracoesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Configuration.ShowOptionsWindow();
+            using (var ConfigurationForm = new ConfigurationForm()) {
+                ConfigurationForm.ShowDialog();
+                if (ConfigurationForm.save) {
+                    Configuration.Data.State = EDbState.Update;
+                    Configuration.SaveConfiguration();
+                    DeviceController.ApplyConfiguration();
+                }
+            }
             EnableDeviceButtons();
         }
         private void mnu_start_window_Click(object sender, EventArgs e)

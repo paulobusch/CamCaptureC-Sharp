@@ -55,7 +55,7 @@ namespace CapturaVideo.Model
                     Data = cnn.Query<ConfigurationDto>(sqlSelectConfiguration, null).FirstOrDefault();
                     Data.Devices = cnn.Query<DeviceDto>(sqlSelectDevices, new { IdConfiguration = Data.Id });
                 }
-            }catch (Exception ex){
+            }catch (Exception){
                 MessageBox.Show("Falha ao carregar as configurações!", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -118,22 +118,10 @@ namespace CapturaVideo.Model
                    ));
                 }
             }
-            catch (Exception ex){
+            catch (Exception){
                 MessageBox.Show("Falha ao salvar configurações!", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-            }
-        }
-        public static void ShowOptionsWindow()
-        {
-            using (var ConfigurationForm = new ConfigurationForm())
-            {
-                ConfigurationForm.ShowDialog();
-                if (ConfigurationForm.save) {
-                    Data.State = EDbState.Update;
-                    SaveConfiguration();
-                    DeviceController.ApplyConfiguration();
-                }
             }
         }
     }
