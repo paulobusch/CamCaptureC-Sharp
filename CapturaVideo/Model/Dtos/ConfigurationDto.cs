@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace CapturaVideo.Model.Dtos {
-    public class ConfigurationDto {
+    public class ConfigurationDto : BaseDto {
         public int Id { get; set; }
         public int TimeInterval { get; set; }
         public bool EnableInterval { get; set; }

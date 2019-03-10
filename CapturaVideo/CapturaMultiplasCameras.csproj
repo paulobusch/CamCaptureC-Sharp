@@ -98,8 +98,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Dtos\BaseDto.cs" />
     <Compile Include="Model\Dtos\ConfigurationDto.cs" />
     <Compile Include="Model\Dtos\DeviceDto.cs" />
+    <Compile Include="Model\Enums\EDbState.cs" />
     <Compile Include="Model\Enums\ELegendAlign.cs" />
     <Compile Include="Model\SqlLite.cs" />
     <Compile Include="View\About.cs">

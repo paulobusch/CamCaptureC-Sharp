@@ -1,7 +1,5 @@
-﻿using System.Drawing;
-
-namespace CapturaVideo.Model.Dtos {
-    public class DeviceDto {
+﻿namespace CapturaVideo.Model.Dtos {
+    public class DeviceDto : BaseDto {
         public int ConfigurationId { get; set; }
         public string MonikerString { get; set; }
         public int Width { get; set; }

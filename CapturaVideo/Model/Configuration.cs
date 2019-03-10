@@ -119,6 +119,9 @@ namespace CapturaVideo.Model
         }
         public static void SaveConfiguration()
         {
+            if (Data?.State == EDbState.Unchanged)
+                return;
+
             try
             {
                 var sqlInsertConfiguration = @"
