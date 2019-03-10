@@ -1,17 +1,8 @@
-﻿using CapturaVideo.Model;
-using CapturaVideo.Model.Dtos;
+﻿using CapturaVideo.Model.Dtos;
 using CapturaVideo.Model.Enums;
 using Dapper;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace CapturaVideo.Model
@@ -19,27 +10,6 @@ namespace CapturaVideo.Model
     public static class Configuration
     {
         public static ConfigurationDto Data = new ConfigurationDto();
-
-        //device
-        public static int time_interval = 5;
-        public static bool enable_interval = false;
-        public static bool enable_server = false;
-
-        //video
-        public static string path_save_video = $@"{Consts.CURRENT_PATH}\";
-        public static int frame_rate = 15;
-        public static int bit_rate = 100000;
-        public static bool compress_video = false;
-        public static bool show_date_time = false;
-        public static ELegendAlign legend_align = ELegendAlign.BottonRight;
-        public static Font font = new Font("Arial", 10);
-
-        //Dictionary<MonikerString, FrameSize>
-        public static Dictionary<string, Size> devices_config = new Dictionary<string, Size>();
-
-        //menu
-        public static bool start_window = false;
-        public static bool start_window_minimized = false;
 
         public static void LoadConfiguration(){
             // Check database
@@ -65,8 +35,8 @@ namespace CapturaVideo.Model
 	                    config.frame_rate as FrameRate,
 	                    config.bit_rate as BitRate,
 	                    config.legend_align as LegendAlign,
-	                    config.font_family as FontFamily,
-	                    config.font_size as FontSize,
+	                    config.font_family as _fontFamily,
+	                    config.font_size as _fontSize,
 	                    config.enable_start as EnableStart,
 	                    config.enable_start_minimized as EnableStartMinimized
                     from configuration config
@@ -75,8 +45,8 @@ namespace CapturaVideo.Model
                 var sqlSelectDevices = @"
                     select
                         device.moniker_string as MonikerString,
-                        device.width as Width,
-                        device.height as Height
+                        device.width as _width,
+                        device.height as _height
                     from devices device
                     where device.id_configuration=@IdConfiguration";
 
@@ -110,21 +80,42 @@ namespace CapturaVideo.Model
                     @FontFamily,@FontSize,@EnableStart,@EnableStartMinimized,datetime(),1);";
 
                 var sqlInsertDevices = @"
-                    insert into devices values 
-                    ((select id from configuration where is_last=1),
-                    @MonikerString,@Width,@Height);";
+                    insert into devices(moniker_string,id_configuration,width,height)
+                    values(@MonikerString,(select id from configuration where is_last=1),@Width,@Height);";
 
                 using (var cnn = SqLite.NewConnection()) {
                     cnn.Open();
 
                     // Configuration
-                    cnn.Execute(sqlInsertConfiguration, Data);
+                    cnn.Execute(sqlInsertConfiguration, new {
+                        Data.TimeInterval,
+                        Data.EnableInterval,
+                        Data.EnableServer,
+                        Data.EnableCompressVideo,
+                        Data.ViewDateTime,
+                        Data.PathSaveVideo,
+                        Data.FrameRate,
+                        Data.BitRate,
+                        Data.LegendAlign,
+                        FontFamily = Data.Font.FontFamily.Name,
+                        FontSize = Data.Font.Size,
+                        Data.EnableStart,
+                        Data.EnableStartMinimized
+                    });
+                    Data.State = EDbState.Unchanged;
 
                     // Devices
+                    Data.Devices = DeviceController.BindDeviceConfiguration();
                     if (Data.Devices == null || Data.Devices.Count() == 0)
                         return;
 
-                    cnn.Execute(sqlInsertDevices, Data.Devices);
+                    cnn.Execute(sqlInsertDevices, Data.Devices
+                        .Select(dev => new {
+                            dev.MonikerString,
+                            dev.Size.Width,
+                            dev.Size.Height
+                        }
+                   ));
                 }
             }
             catch (Exception ex){
@@ -138,7 +129,8 @@ namespace CapturaVideo.Model
             using (var ConfigurationForm = new ConfigurationForm())
             {
                 ConfigurationForm.ShowDialog();
-                if (ConfigurationForm.save){
+                if (ConfigurationForm.save) {
+                    Data.State = EDbState.Update;
                     SaveConfiguration();
                     DeviceController.ApplyConfiguration();
                 }

@@ -28,7 +28,7 @@ namespace CapturaVideo.Model {
 	                bit_rate integer,
 	                legend_align integer,
 	                font_family varchar(50),
-	                font_size integer,
+	                font_size real,
 	                enable_start bit,
 	                enable_start_minimized bit,
                     date_time date_time,
@@ -36,7 +36,7 @@ namespace CapturaVideo.Model {
                 );
 
                 create table devices(
-	                moniker_string varchar(100) primary key,
+	                moniker_string varchar(100),
 	                id_configuration integer,
 	                width integer,
 	                height integer,

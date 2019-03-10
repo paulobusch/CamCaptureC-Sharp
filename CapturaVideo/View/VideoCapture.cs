@@ -71,9 +71,9 @@ namespace CapturaVideo
         #region Control
         private void LoadControlsConfiguration()
         {
-            mnu_start_window.Checked = Configuration.start_window;
-            mnu_start_window_minimized.Checked = Configuration.start_window_minimized;
-            if (Configuration.start_window_minimized){
+            mnu_start_window.Checked = Configuration.Data.EnableStart;
+            mnu_start_window_minimized.Checked = Configuration.Data.EnableStartMinimized;
+            if (Configuration.Data.EnableStartMinimized) {
                 this.WindowState = FormWindowState.Minimized;
                 Hide();
             }
@@ -209,12 +209,12 @@ namespace CapturaVideo
         }
         private void mnu_start_window_Click(object sender, EventArgs e)
         {
-            if(Helpers.SetStartup(!Configuration.start_window))
-                Configuration.start_window = mnu_start_window.Checked = !Configuration.start_window;
+            if(Helpers.SetStartup(!Configuration.Data.EnableStart))
+                Configuration.Data.EnableStart = mnu_start_window.Checked = !Configuration.Data.EnableStart;
         }
         private void mnu_start_window_minimized_Click(object sender, EventArgs e)
         {
-            Configuration.start_window_minimized = mnu_start_window_minimized.Checked = !Configuration.start_window_minimized;
+            Configuration.Data.EnableStartMinimized = mnu_start_window_minimized.Checked = !Configuration.Data.EnableStartMinimized;
         }
         private void sobreToolStripMenuItem_Click(object sender, EventArgs e)
         {

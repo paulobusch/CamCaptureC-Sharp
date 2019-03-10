@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using CapturaVideo.Model;
 using CapturaVideo.Model.Enums;
 using DirectX.Capture;
 
@@ -54,7 +53,7 @@ namespace CapturaVideo.Model
                     device.font = null;
                     return;
                 }
-                device.font.FrameRate = Configuration.frame_rate;
+                device.font.FrameRate = Configuration.Data.FrameRate;
                 device.font.NewFrame += NewFrame;
                 device.font.Start();
             }

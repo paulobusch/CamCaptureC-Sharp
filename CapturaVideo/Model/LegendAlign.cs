@@ -1,5 +1,4 @@
-﻿using CapturaVideo.Model;
-using CapturaVideo.Model.Enums;
+﻿using CapturaVideo.Model.Enums;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -19,12 +18,12 @@ namespace CapturaVideo.Model
             if (_location == null || _size == null)
                 return;
 
-            var text = TextRenderer.MeasureText(DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), Configuration.font);
+            var text = TextRenderer.MeasureText(DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), Configuration.Data.Font);
 
             var width = text.Width;
             var height = text.Height;
 
-            switch (Configuration.legend_align)
+            switch (Configuration.Data.LegendAlign)
             {
                 case ELegendAlign.TopLeft:
                     _location.X = Consts.LOCATION.X;
@@ -46,9 +45,9 @@ namespace CapturaVideo.Model
         }
         public void WriteLegend(Bitmap img)
         {
-            if (Configuration.show_date_time)
+            if (Configuration.Data.ViewDateTime)
                 using (Graphics g = Graphics.FromImage(img))
-                    TextRenderer.DrawText(g, DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), Configuration.font, _location, Color.White, Color.Black);
+                    TextRenderer.DrawText(g, DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), Configuration.Data.Font, _location, Color.White, Color.Black);
         }
     }
 }

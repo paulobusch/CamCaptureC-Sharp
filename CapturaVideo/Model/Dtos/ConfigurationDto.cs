@@ -1,5 +1,6 @@
 ﻿using CapturaVideo.Model.Enums;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace CapturaVideo.Model.Dtos {
     public class ConfigurationDto : BaseDto {
@@ -13,11 +14,25 @@ namespace CapturaVideo.Model.Dtos {
         public int FrameRate { get; set; }
         public int BitRate { get; set; }
         public ELegendAlign LegendAlign { get; set; }
-        public string FontFamily { get; set; }
-        public int FontSize { get; set; }
         public bool EnableStart { get; set; }
         public bool EnableStartMinimized { get; set; }
         public IEnumerable<DeviceDto> Devices { get; set; }
+        public Font Font {
+            get {
+                if (_font == null)
+                    _font = new Font(_fontFamily, _fontSize);
+                return _font;
+            }
+            set {
+                _fontFamily = value.FontFamily.Name;
+                _fontSize = value.Size;
+                _font = value;
+            }
+        }
+
+        private string _fontFamily;
+        private float _fontSize;
+        private Font _font;
 
         public ConfigurationDto() {
             // Device
@@ -27,7 +42,6 @@ namespace CapturaVideo.Model.Dtos {
             this.EnableServer = false;
             this.Devices = new List<DeviceDto>();
 
-
             // Video
             this.ViewDateTime = false;
             this.EnableCompressVideo = false;
@@ -35,13 +49,11 @@ namespace CapturaVideo.Model.Dtos {
             this.FrameRate = 15;
             this.BitRate = 100000;
             this.LegendAlign = ELegendAlign.BottonRight;
-            this.FontFamily = "Arial";
-            this.FontSize = 10;
+            this.Font = new Font("Arial", 10.0f);
 
             // Menu
             this.EnableStart = false;
             this.EnableStartMinimized = false;
-
         }
     }
 }

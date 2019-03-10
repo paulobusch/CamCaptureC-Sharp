@@ -1,4 +1,5 @@
 ﻿using CapturaVideo.Model;
+using CapturaVideo.Model.Dtos;
 using CapturaVideo.Model.Enums;
 using DirectX.Capture;
 using System;
@@ -59,7 +60,7 @@ namespace CapturaVideo.Model
             //start services
             try
             {
-                if (Configuration.enable_server)
+                if (Configuration.Data.EnableServer)
                     ServerHttpListener.StratThread();
                 else
                     ServerHttpListener.StopThread();
@@ -73,32 +74,32 @@ namespace CapturaVideo.Model
 
 
             //link
-            lbl_link.Visible = Configuration.enable_server;
+            lbl_link.Visible = Configuration.Data.EnableServer;
 
             //update device
             IterateDevices(x => x.Value.UpdateConfiguration());
 
             //timer interval
-            if (Configuration.enable_interval) {
+            if (Configuration.Data.EnableInterval) {
                     StartAllDevices();
                     StartAllVideo();
             }
 
             timer_video_interval.Enabled = false;
-            timer_video_interval.Interval = (Configuration.time_interval * 60000);
-            timer_video_interval.Enabled = Configuration.enable_interval;
+            timer_video_interval.Interval = (Configuration.Data.TimeInterval * 60000);
+            timer_video_interval.Enabled = Configuration.Data.EnableInterval;
         }
         public static void RestoreDevicesConfiguration() {
-            foreach (KeyValuePair<string, Size> cam in Configuration.devices_config)
+            foreach (var cam in Configuration.Data.Devices)
             {
                 //aplly values interface
-                var info = devices.Find(x => x.MonikerString == cam.Key);
+                var info = devices.Find(x => x.MonikerString == cam.MonikerString);
                 try
                 {
                     if (info != null)
                     {
                         device_interface.info = info;
-                        device_interface.resolution = cam.Value;
+                        device_interface.resolution = cam.Size;
 
                         NewDevice();
                     }
@@ -110,13 +111,14 @@ namespace CapturaVideo.Model
                 }
             }
         }
-        public static Dictionary<string, Size> BindDeviceConfiguration()
+        public static IEnumerable<DeviceDto> BindDeviceConfiguration()
         {
-            var devices_config = new Dictionary<string, Size>();
-            IterateDevices(x => {
-                devices_config.Add(x.Value.device.info.MonikerString, x.Value.device.resolution);
-            });
-            return devices_config;
+            foreach(var device in devices_capture) { 
+                yield return new DeviceDto() {
+                    MonikerString = device.Value.device.info.MonikerString,
+                    Size = device.Value.device.resolution
+                };
+            };
         }
         #endregion
 
@@ -288,6 +290,7 @@ namespace CapturaVideo.Model
             var new_key = devices_capture.Count > 0 ? devices_capture.Keys.Max() + 1 : 1;
             lock(devices_capture)
                 devices_capture.Add(new_key, new DeviceCapture() { key = new_key, device = device_interface.Clone() });
+            Configuration.Data.State = EDbState.Update;
             GetDevice(new_key).ReserveDevice();
             selected_device = new_key;
             FillListView();
@@ -298,6 +301,7 @@ namespace CapturaVideo.Model
             {
                 var key = (int)list_view_devices.SelectedItems[0].Tag;
                 GetDevice(key).device = device_interface.Clone();
+                Configuration.Data.State = EDbState.Update;
                 FillListView();
             }   
         }
@@ -311,6 +315,7 @@ namespace CapturaVideo.Model
                 GetDevice(key).RestoreDevice();
                 lock(devices_capture)
                     devices_capture.Remove(key);
+                Configuration.Data.State = EDbState.Update;
                 FillListView();
             }
         }

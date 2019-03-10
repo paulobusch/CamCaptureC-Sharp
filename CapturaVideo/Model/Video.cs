@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Threading;
 using System.Diagnostics;
-using CapturaVideo.Model;
 using AForge.Video.FFMPEG;
 
 namespace CapturaVideo.Model
@@ -28,8 +27,8 @@ namespace CapturaVideo.Model
         public void StartRecording()
         {
             _writer = new VideoFileWriter();
-            _writer.Open($"{Configuration.path_save_video}{DateTime.Now.ToString("yyyy-MM-dd HHmm")}-{_id_name}_.avi",
-                _resolution.Width, _resolution.Height, Configuration.frame_rate, VideoCodec.MPEG4, Configuration.bit_rate);
+            _writer.Open($"{Configuration.Data.PathSaveVideo}{DateTime.Now.ToString("yyyy-MM-dd HHmm")}-{_id_name}_.avi",
+                _resolution.Width, _resolution.Height, Configuration.Data.FrameRate, VideoCodec.MPEG4, Configuration.Data.BitRate);
             _start_record = DateTime.Now;
             recording = true;
         }
@@ -52,7 +51,7 @@ namespace CapturaVideo.Model
         #region Compress
         public static void CompressAllVideoThread()
         {
-            if (!Configuration.compress_video)
+            if (!Configuration.Data.EnableCompressVideo)
                 return;
             if (_compress == null || (_compress.ThreadState & (System.Threading.ThreadState.Stopped | System.Threading.ThreadState.Unstarted)) != 0)
             {
@@ -68,7 +67,7 @@ namespace CapturaVideo.Model
                 StartInfo =
                 {
                     FileName = $@"{Consts.CURRENT_PATH}\{Consts.FFMPEG_PATH}\compressFiles.bat",
-                    Arguments = $"\"{Configuration.path_save_video}*_.avi\" \"{Consts.CURRENT_PATH}\"",//filter media - source
+                    Arguments = $"\"{Configuration.Data.PathSaveVideo}*_.avi\" \"{Consts.CURRENT_PATH}\"",//filter media - source
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardInput = true
