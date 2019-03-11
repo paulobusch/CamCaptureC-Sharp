@@ -16,7 +16,6 @@ namespace CapturaVideo.Model
         public const string FFMPEG_PATH = @"ffmpeg_compress";
         public const string NAME_FILE_LOG = @"log.ini";
         public const string NAME_FILE_DATA = @"data.db";
-        public const string NAME_FILE_DATA_TEST = @"data.test.db";
         public const string NAME_FILE_CONFIG = @"config.ini";
 
         //video

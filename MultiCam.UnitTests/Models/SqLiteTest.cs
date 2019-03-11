@@ -39,7 +39,15 @@ namespace MultiCam.UnitTests {
 
         [Test]
         public void DatabaseExists() {
+            var pathDb = $@"{Consts.CURRENT_PATH}\{Consts.DATA_PATH}";
+            var fileDb = $@"{pathDb}\{Consts.NAME_FILE_DATA}";
+            Directory.CreateDirectory(pathDb);
 
+            File.Create(fileDb).Close();
+            Assert.True(SqLite.DatabaseExists());
+
+            File.Delete(fileDb);
+            Assert.False(SqLite.DatabaseExists());
         }
 
         [Test]

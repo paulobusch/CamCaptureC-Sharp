@@ -13,7 +13,7 @@ namespace MultiCam.UnitTests {
 
         [Test]
         public void LoadConfiguration() {
-
+            
         }
 
         [Test]
