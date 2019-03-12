@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Reflection;
 using System.Threading;
 using CapturaVideo.Model;
-using CapturaVideo.Model;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using CapturaVideo.Model;
 using CapturaVideo.Janelas;
-using CapturaVideo.Model;
 using WebServer.Models;
 using DirectX.Capture;
 using CapturaVideo.Model.Enums;

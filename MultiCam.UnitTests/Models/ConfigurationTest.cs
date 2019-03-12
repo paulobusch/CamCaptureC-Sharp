@@ -1,6 +1,5 @@
 ﻿using CapturaVideo;
 using NUnit.Framework;
-using Moq;
 
 namespace MultiCam.UnitTests {
     [TestFixture]
