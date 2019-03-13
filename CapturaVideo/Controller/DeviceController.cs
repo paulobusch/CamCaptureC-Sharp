@@ -206,7 +206,7 @@ namespace CapturaVideo.Model
             //list devices
             FillCombobox(cmb_device, devices.ToArray(), x => {
                 var y = (Filter)x;
-                return new ComboboxItem { Name = y.Name, Value = y };
+                return new ComboboxItemDto { Name = y.Name, Value = y };
             }, null, "Nenhum dispositivo");
         }
         #endregion
@@ -217,10 +217,10 @@ namespace CapturaVideo.Model
             //update resolutions
             FillCombobox(cmb_resolution, Consts.RESOLUTION, x => {
                 var y = (Size)x;
-                return new ComboboxItem { Name = $"{y.Width} x {y.Height}", Value = y };                 
+                return new ComboboxItemDto { Name = $"{y.Width} x {y.Height}", Value = y };                 
             }, "640 x 480", "[Vazio]");
         }
-        private static void FillCombobox(ComboBox cmb, Array collection, Func<object, ComboboxItem> action, string defull = null, string empty = null)
+        private static void FillCombobox(ComboBox cmb, Array collection, Func<object, ComboboxItemDto> action, string defull = null, string empty = null)
         {
             cmb.Items.Clear();
             foreach (var item in collection)

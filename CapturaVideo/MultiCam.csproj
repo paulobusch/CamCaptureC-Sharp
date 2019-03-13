@@ -112,7 +112,7 @@
     <Compile Include="View\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\ComboboxItem.cs" />
+    <Compile Include="Model\Dtos\ComboboxItemDto.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Model\Consts.cs" />
     <Compile Include="Model\DeviceCapture.cs" />

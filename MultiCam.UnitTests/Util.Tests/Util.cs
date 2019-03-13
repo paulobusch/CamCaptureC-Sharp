@@ -4,6 +4,15 @@ using System.Reflection;
 
 namespace MultiCam.UnitTests {
     public static class Util {
+        private static Random _random = new Random();
+
+        #region Randomize
+        public static int RandInt() => _random.Next(int.MinValue, int.MaxValue);
+        public static bool RandBool() => _random.NextDouble() >= 0.5;
+        public static string RandString() => RandInt().ToString("String: {00000000}");
+        #endregion
+
+        #region Properties
         public static T GetProperty<T>(Type type, string property) {
             var prop = type.GetField(property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             return (T)prop.GetValue(type);
@@ -23,5 +32,6 @@ namespace MultiCam.UnitTests {
         public static string GetCurrentPath (){
             return Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString());
         }
+        #endregion
     }
 }

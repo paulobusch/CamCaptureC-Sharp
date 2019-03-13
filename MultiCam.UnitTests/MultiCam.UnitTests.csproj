@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dtos\BaseDtoTest.cs" />
+    <Compile Include="Dtos\ComboboxItemDtoTest.cs" />
     <Compile Include="Dtos\ConfigurationDtoTest.cs" />
     <Compile Include="Dtos\DeviceDtoTest.cs" />
     <Compile Include="Models\ConfigurationTest.cs" />

@@ -1,4 +1,5 @@
 ﻿using CapturaVideo.Model;
+using CapturaVideo.Model.Dtos;
 using DirectX.Capture;
 using System.Drawing;
 
@@ -30,12 +31,12 @@ namespace CapturaVideo.Model
         }
         public void GetInfoInteface()
         {
-            var info = (ComboboxItem)DeviceController.cmb_device.SelectedItem;
+            var info = (ComboboxItemDto)DeviceController.cmb_device.SelectedItem;
             this.info = (info != null && info.Value != null) ? info.GetValue<Filter>() : null;
         }
         public void GetResolutionInteface()
         {
-            this.resolution = ((ComboboxItem)DeviceController.cmb_resolution.SelectedItem).GetValue<Size>();
+            this.resolution = ((ComboboxItemDto)DeviceController.cmb_resolution.SelectedItem).GetValue<Size>();
         }
         #endregion
     }
