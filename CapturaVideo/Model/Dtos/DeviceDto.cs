@@ -6,7 +6,7 @@ namespace CapturaVideo.Model.Dtos {
         public string MonikerString { get; set; }
         public Size Size {
             get {
-                if (_size == null)
+                if (_size == null || _size.IsEmpty)
                     _size = new Size(_width, _height);
                 return _size;
             }

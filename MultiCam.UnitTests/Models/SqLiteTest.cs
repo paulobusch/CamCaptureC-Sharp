@@ -9,19 +9,24 @@ namespace MultiCam.UnitTests {
     [TestFixture]
     public class SqLiteTest {
 
-        private static string name_db_test = "data.test.db";
+        private static string name_db_test;
+        private static string base_path_db;
 
         [SetUp]
         public void SetUp() {
-            // Define connection by test database            
-            var connectionString = $@"Data Source={Util.GetCurrentPath()}\{name_db_test};";
-            Util.SetProperty(typeof(SqLite), "_connectionString", connectionString);
+            name_db_test = "data.test.db";
+            base_path_db = $@"{Util.GetCurrentPath()}\{Consts.DATA_PATH}";
+
+            Directory.CreateDirectory(base_path_db);
+
+            Util.SetProperty(typeof(Consts), "NAME_FILE_DATA", name_db_test);
+            Util.SetProperty(typeof(Consts), "CURRENT_PATH", Util.GetCurrentPath());
         }
 
         [TearDown]
         public void TearDown() {
             // Drop database test
-            File.Delete($@"{Util.GetCurrentPath()}\{name_db_test}");
+            File.Delete($@"{base_path_db}\{name_db_test}");
         }
 
         [Test]
@@ -39,10 +44,7 @@ namespace MultiCam.UnitTests {
 
         [Test]
         public void DatabaseExists() {
-            var pathDb = $@"{Consts.CURRENT_PATH}\{Consts.DATA_PATH}";
-            var fileDb = $@"{pathDb}\{Consts.NAME_FILE_DATA}";
-            Directory.CreateDirectory(pathDb);
-
+            var fileDb = $@"{base_path_db}\{name_db_test}";
             File.Create(fileDb).Close();
             Assert.True(SqLite.DatabaseExists());
 
@@ -66,6 +68,7 @@ namespace MultiCam.UnitTests {
                         tables.Add((string)row["name"]);
                 }
             }
+            SqLite.CreateDatabase();
 
             Assert.Contains("devices", tables);
             Assert.Contains("configuration", tables);

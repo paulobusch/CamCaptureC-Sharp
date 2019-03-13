@@ -1,5 +1,6 @@
 ﻿using CapturaVideo.Model.Dtos;
 using CapturaVideo.Model.Enums;
+using MultiCam.UnitTests;
 using NUnit.Framework;
 using System.Drawing;
 
@@ -24,6 +25,13 @@ namespace UnitTests.Dtos {
             Assert.AreEqual(ELegendAlign.BottonRight, dto.LegendAlign);
             Assert.NotNull(dto.Font);
             Assert.AreEqual(new Font("Arial", 10.0f), dto.Font);
+
+            Util.SetProperty(dto, "_font", null);
+            Util.SetProperty(dto, "_fontSize", 12.0f);
+            Util.SetProperty(dto, "_fontFamily", "Comic Sans MS");
+
+            Assert.AreEqual(12.0f, dto.Font.Size);
+            Assert.AreEqual("Comic Sans MS", dto.Font.FontFamily.Name);
 
             Assert.False(dto.EnableStart);
             Assert.False(dto.EnableStartMinimized);

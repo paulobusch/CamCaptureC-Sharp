@@ -4,7 +4,7 @@ using System.IO;
 
 namespace CapturaVideo.Model {
     public static class SqLite {
-        private static string _connectionString = $@"Data Source={Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}; Version=3;";
+        private static string _connectionString = $@"Data Source={Consts.CURRENT_PATH}\{Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}; Version=3;";
 
         public static SQLiteConnection NewConnection() {
             return new SQLiteConnection(_connectionString);

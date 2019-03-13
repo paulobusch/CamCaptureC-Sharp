@@ -12,6 +12,14 @@ namespace MultiCam.UnitTests {
             var prop = type.GetField(property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             prop.SetValue(type, newValue);
         }
+        public static T GetProperty<T>(object obj, string property) {
+            var prop = obj.GetType().GetField(property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            return (T)prop.GetValue(obj);
+        }
+        public static void SetProperty(object obj, string property, object newValue) {
+            var prop = obj.GetType().GetField(property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            prop.SetValue(obj, newValue);
+        }
         public static string GetCurrentPath (){
             return Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString());
         }

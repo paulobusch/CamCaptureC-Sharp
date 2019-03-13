@@ -11,12 +11,12 @@ namespace CapturaVideo.Model
         public static Image DEFAULT_IMAGE = new Bitmap(400, 300, PixelFormat.Format32bppPArgb);
 
         //confguration
-        public const string WEB_PATH = @"web_pages";
-        public const string DATA_PATH = @"app_data";
-        public const string FFMPEG_PATH = @"ffmpeg_compress";
-        public const string NAME_FILE_LOG = @"log.ini";
-        public const string NAME_FILE_DATA = @"data.db";
-        public const string NAME_FILE_CONFIG = @"config.ini";
+        public static string WEB_PATH = @"web_pages";
+        public static string DATA_PATH = @"app_data";
+        public static string FFMPEG_PATH = @"ffmpeg_compress";
+        public static string NAME_FILE_LOG = @"log.ini";
+        public static string NAME_FILE_DATA = @"data.db";
+        public static string NAME_FILE_CONFIG = @"config.ini";
 
         //video
         public static string CURRENT_PATH = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString());
