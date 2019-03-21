@@ -8,7 +8,9 @@ namespace MultiCam.UnitTests {
 
         #region Randomize
         public static int RandInt() => _random.Next(int.MinValue, int.MaxValue);
+        public static int RandInt(int start, int end) => _random.Next(start, end);
         public static bool RandBool() => _random.NextDouble() >= 0.5;
+        public static float RandFloat() => (float)_random.NextDouble();
         public static string RandString() => RandInt().ToString("String: {00000000}");
         #endregion
 

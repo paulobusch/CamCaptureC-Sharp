@@ -6,9 +6,9 @@ namespace CapturaVideo.Model.Dtos {
         public string MonikerString { get; set; }
         public Size Size {
             get {
-                if (_size == null || _size.IsEmpty)
+                if (_size == null || _size.Value.IsEmpty)
                     _size = new Size(_width, _height);
-                return _size;
+                return _size.Value;
             }
             set {
                 _width = value.Width;
@@ -19,11 +19,14 @@ namespace CapturaVideo.Model.Dtos {
 
         private int _width;
         private int _height;
-        private Size _size;
+        private Size? _size;
 
         public DeviceDto() {
             this.MonikerString = null;
             this.Size = new Size(640,480);
+
+            // Privates
+            _size = null;
         }
     }
 }

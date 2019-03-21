@@ -16,7 +16,7 @@ namespace CapturaVideo.Model.Dtos {
         public ELegendAlign LegendAlign { get; set; }
         public bool EnableStart { get; set; }
         public bool EnableStartMinimized { get; set; }
-        public IEnumerable<DeviceDto> Devices { get; set; }
+        public virtual IEnumerable<DeviceDto> Devices { get; set; }
         public Font Font {
             get {
                 if (_font == null)
@@ -54,6 +54,9 @@ namespace CapturaVideo.Model.Dtos {
             // Menu
             this.EnableStart = false;
             this.EnableStartMinimized = false;
+
+            // Privates
+            _font = null;
         }
     }
 }

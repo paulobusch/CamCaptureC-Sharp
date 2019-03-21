@@ -18,12 +18,12 @@ namespace CapturaVideo.Model
             if (_location == null || _size == null)
                 return;
 
-            var text = TextRenderer.MeasureText(DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), Configuration.Data.Font);
+            var text = TextRenderer.MeasureText(DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), DeviceController.Configuration.Font);
 
             var width = text.Width;
             var height = text.Height;
 
-            switch (Configuration.Data.LegendAlign)
+            switch (DeviceController.Configuration.LegendAlign)
             {
                 case ELegendAlign.TopLeft:
                     _location.X = Consts.LOCATION.X;
@@ -45,9 +45,9 @@ namespace CapturaVideo.Model
         }
         public void WriteLegend(Bitmap img)
         {
-            if (Configuration.Data.ViewDateTime)
+            if (DeviceController.Configuration.ViewDateTime)
                 using (Graphics g = Graphics.FromImage(img))
-                    TextRenderer.DrawText(g, DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), Configuration.Data.Font, _location, Color.White, Color.Black);
+                    TextRenderer.DrawText(g, DateTime.Now.ToString(Consts.FORMAT_DATE_TIME), DeviceController.Configuration.Font, _location, Color.White, Color.Black);
         }
     }
 }

@@ -18,33 +18,33 @@ namespace CapturaVideo
             InitFonts();
 
             //load config interface
-            txt_dir.Text = Configuration.Data.PathSaveVideo;
-            bar_timer.Value = Configuration.Data.TimeInterval;
-            bar_timer.Enabled = Configuration.Data.EnableInterval;
-            bar_frame_rate.Value = Configuration.Data.FrameRate;
-            bar_bit_rate.Value = Configuration.Data.BitRate / 1000;
-            chk_enable_timer.Checked = Configuration.Data.EnableInterval;
-            chk_web_difusion.Checked = Configuration.Data.EnableServer;
-            chk_enable_compress.Checked = Configuration.Data.EnableCompressVideo;
-            chk_date_time.Checked = Configuration.Data.ViewDateTime;
-            cmb_font.Text = Configuration.Data.Font.Size.ToString();
-            SetAlign(Configuration.Data.LegendAlign);
+            txt_dir.Text = DeviceController.Configuration.PathSaveVideo;
+            bar_timer.Value = DeviceController.Configuration.TimeInterval;
+            bar_timer.Enabled = DeviceController.Configuration.EnableInterval;
+            bar_frame_rate.Value = DeviceController.Configuration.FrameRate;
+            bar_bit_rate.Value = DeviceController.Configuration.BitRate / 1000;
+            chk_enable_timer.Checked = DeviceController.Configuration.EnableInterval;
+            chk_web_difusion.Checked = DeviceController.Configuration.EnableServer;
+            chk_enable_compress.Checked = DeviceController.Configuration.EnableCompressVideo;
+            chk_date_time.Checked = DeviceController.Configuration.ViewDateTime;
+            cmb_font.Text = DeviceController.Configuration.Font.Size.ToString();
+            SetAlign(DeviceController.Configuration.LegendAlign);
         }
 
         #region Submit
         private void btn_ok_config_Click(object sender, EventArgs e)
         {
             //aply values
-            Configuration.Data.PathSaveVideo = GetPath(txt_dir.Text);
-            Configuration.Data.TimeInterval = bar_timer.Value;
-            Configuration.Data.FrameRate = bar_frame_rate.Value;
-            Configuration.Data.BitRate = bar_bit_rate.Value * 1000;
-            Configuration.Data.EnableInterval = chk_enable_timer.Checked;
-            Configuration.Data.EnableServer = chk_web_difusion.Checked;
-            Configuration.Data.EnableCompressVideo = chk_enable_compress.Checked;
-            Configuration.Data.ViewDateTime = chk_date_time.Checked;
-            Configuration.Data.Font = new Font(Configuration.Data.Font.FontFamily, Convert.ToInt32(cmb_font.Text));
-            Configuration.Data.LegendAlign = GetAlign();
+            DeviceController.Configuration.PathSaveVideo = GetPath(txt_dir.Text);
+            DeviceController.Configuration.TimeInterval = bar_timer.Value;
+            DeviceController.Configuration.FrameRate = bar_frame_rate.Value;
+            DeviceController.Configuration.BitRate = bar_bit_rate.Value * 1000;
+            DeviceController.Configuration.EnableInterval = chk_enable_timer.Checked;
+            DeviceController.Configuration.EnableServer = chk_web_difusion.Checked;
+            DeviceController.Configuration.EnableCompressVideo = chk_enable_compress.Checked;
+            DeviceController.Configuration.ViewDateTime = chk_date_time.Checked;
+            DeviceController.Configuration.Font = new Font(DeviceController.Configuration.Font.FontFamily, Convert.ToInt32(cmb_font.Text));
+            DeviceController.Configuration.LegendAlign = GetAlign();
 
             //finish
             save = true;
@@ -82,7 +82,7 @@ namespace CapturaVideo
 
             //aplly values
             if(!chk_enable_timer.Checked)
-                bar_timer.Value = Configuration.Data.TimeInterval;
+                bar_timer.Value = DeviceController.Configuration.TimeInterval;
         }
         #endregion
 
@@ -104,8 +104,8 @@ namespace CapturaVideo
 
             //aplly values
             if (!chk_date_time.Checked){
-                cmb_font.Text = Configuration.Data.Font.Size.ToString();
-                SetAlign(Configuration.Data.LegendAlign);
+                cmb_font.Text = DeviceController.Configuration.Font.Size.ToString();
+                SetAlign(DeviceController.Configuration.LegendAlign);
             }
         }
         #endregion

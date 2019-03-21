@@ -6,7 +6,7 @@ using DirectX.Capture;
 
 namespace CapturaVideo.Model
 {
-    internal class DeviceCapture
+    public class DeviceCapture
     {
         internal int key;
         internal Image process_image;
@@ -53,7 +53,7 @@ namespace CapturaVideo.Model
                     device.font = null;
                     return;
                 }
-                device.font.FrameRate = Configuration.Data.FrameRate;
+                device.font.FrameRate = DeviceController.Configuration.FrameRate;
                 device.font.NewFrame += NewFrame;
                 device.font.Start();
             }

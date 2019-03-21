@@ -63,16 +63,18 @@ namespace CapturaVideo
             video_interval.Enabled = false;
             ServerHttpListener.StopThread();
             DeviceController.StopAllDevices(false);
-            Configuration.SaveConfiguration();
+            // TODO: Implements automatic bind devices
+            DeviceController.Configuration.Devices = DeviceController.BindDeviceConfiguration();
+            Config.SaveConfiguration(DeviceController.Configuration);
         }
         #endregion
 
         #region Control
         private void LoadControlsConfiguration()
         {
-            mnu_start_window.Checked = Configuration.Data.EnableStart;
-            mnu_start_window_minimized.Checked = Configuration.Data.EnableStartMinimized;
-            if (Configuration.Data.EnableStartMinimized) {
+            mnu_start_window.Checked = DeviceController.Configuration.EnableStart;
+            mnu_start_window_minimized.Checked = DeviceController.Configuration.EnableStartMinimized;
+            if (DeviceController.Configuration.EnableStartMinimized) {
                 this.WindowState = FormWindowState.Minimized;
                 Hide();
             }
@@ -206,8 +208,10 @@ namespace CapturaVideo
             using (var ConfigurationForm = new ConfigurationForm()) {
                 ConfigurationForm.ShowDialog();
                 if (ConfigurationForm.save) {
-                    Configuration.Data.State = EDbState.Update;
-                    Configuration.SaveConfiguration();
+                    DeviceController.Configuration.State = EDbState.Update;
+                    // TODO: Implements automatic bind devices
+                    DeviceController.Configuration.Devices = DeviceController.BindDeviceConfiguration();
+                    Config.SaveConfiguration(DeviceController.Configuration);
                     DeviceController.ApplyConfiguration();
                 }
             }
@@ -215,12 +219,12 @@ namespace CapturaVideo
         }
         private void mnu_start_window_Click(object sender, EventArgs e)
         {
-            if(Helpers.SetStartup(!Configuration.Data.EnableStart))
-                Configuration.Data.EnableStart = mnu_start_window.Checked = !Configuration.Data.EnableStart;
+            if(Helpers.SetStartup(!DeviceController.Configuration.EnableStart))
+                DeviceController.Configuration.EnableStart = mnu_start_window.Checked = !DeviceController.Configuration.EnableStart;
         }
         private void mnu_start_window_minimized_Click(object sender, EventArgs e)
         {
-            Configuration.Data.EnableStartMinimized = mnu_start_window_minimized.Checked = !Configuration.Data.EnableStartMinimized;
+            DeviceController.Configuration.EnableStartMinimized = mnu_start_window_minimized.Checked = !DeviceController.Configuration.EnableStartMinimized;
         }
         private void sobreToolStripMenuItem_Click(object sender, EventArgs e)
         {

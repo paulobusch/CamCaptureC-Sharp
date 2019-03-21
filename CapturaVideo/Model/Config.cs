@@ -7,17 +7,15 @@ using System.Windows.Forms;
 
 namespace CapturaVideo.Model
 {
-    public static class Configuration
+    public static class Config
     {
-        public static ConfigurationDto Data = new ConfigurationDto();
-
-        public static void LoadConfiguration(){
+        public static ConfigurationDto LoadConfiguration(){
             // Check database
             if (!SqLite.DatabaseExists()) {
                 SqLite.CreateDatabase();
-                Data.State = EDbState.Create;
-                SaveConfiguration();
-                return;
+                var configurationDto = new ConfigurationDto();
+                configurationDto.State = EDbState.Create;
+                return configurationDto;
             }
 
             // Load
@@ -44,27 +42,38 @@ namespace CapturaVideo.Model
 
                 var sqlSelectDevices = @"
                     select
+                        device.id_configuration as ConfigurationId,
                         device.moniker_string as MonikerString,
                         device.width as _width,
                         device.height as _height
                     from devices device
                     where device.id_configuration=@IdConfiguration";
 
+                var configurationDto = null as ConfigurationDto;
                 using (var cnn = SqLite.NewConnection()) {
                     cnn.Open();
-                    Data = cnn.Query<ConfigurationDto>(sqlSelectConfiguration, null).FirstOrDefault();
-                    Data.Devices = cnn.Query<DeviceDto>(sqlSelectDevices, new { IdConfiguration = Data.Id });
+                    configurationDto = cnn.Query<ConfigurationDto>(sqlSelectConfiguration, null).FirstOrDefault();
+                    configurationDto.Devices = cnn.Query<DeviceDto>(sqlSelectDevices, new { IdConfiguration = configurationDto.Id });
                 }
-            }catch (Exception){
+
+                return configurationDto;
+            } catch (Exception){
                 MessageBox.Show("Falha ao carregar as configurações!", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
+            return new ConfigurationDto();
         }
-        public static void SaveConfiguration()
+        public static bool TESTE() {
+            return true;
+        }
+        public static void SaveConfiguration(ConfigurationDto dto)
         {
-            if (Data.State == EDbState.Unchanged)
+            // Check database
+            if (dto.State == EDbState.Unchanged)
                 return;
+            if (!SqLite.DatabaseExists())
+                SqLite.CreateDatabase();
             try
             {
                 var sqlInsertConfiguration = @"
@@ -88,37 +97,39 @@ namespace CapturaVideo.Model
 
                     // Configuration
                     cnn.Execute(sqlInsertConfiguration, new {
-                        Data.TimeInterval,
-                        Data.EnableInterval,
-                        Data.EnableServer,
-                        Data.EnableCompressVideo,
-                        Data.ViewDateTime,
-                        Data.PathSaveVideo,
-                        Data.FrameRate,
-                        Data.BitRate,
-                        Data.LegendAlign,
-                        FontFamily = Data.Font.FontFamily.Name,
-                        FontSize = Data.Font.Size,
-                        Data.EnableStart,
-                        Data.EnableStartMinimized
+                        dto.TimeInterval,
+                        dto.EnableInterval,
+                        dto.EnableServer,
+                        dto.EnableCompressVideo,
+                        dto.ViewDateTime,
+                        dto.PathSaveVideo,
+                        dto.FrameRate,
+                        dto.BitRate,
+                        dto.LegendAlign,
+                        FontFamily = dto.Font.FontFamily.Name,
+                        FontSize = dto.Font.Size,
+                        dto.EnableStart,
+                        dto.EnableStartMinimized
                     });
-                    Data.State = EDbState.Unchanged;
+                    dto.State = EDbState.Unchanged;
 
                     // Devices
-                    Data.Devices = DeviceController.BindDeviceConfiguration();
-                    if (Data.Devices == null || Data.Devices.Count() == 0)
+                    if (dto.Devices == null || dto.Devices.Count() == 0)
                         return;
 
-                    cnn.Execute(sqlInsertDevices, Data.Devices
+                    cnn.Execute(sqlInsertDevices, dto.Devices
                         .Select(dev => new {
                             dev.MonikerString,
                             dev.Size.Width,
                             dev.Size.Height
                         }
-                   ));
+                    ));
+                    dto.Devices.AsList<DeviceDto>().ForEach(x => x.State = EDbState.Unchanged);
                 }
             }
-            catch (Exception){
+            catch (Exception ex){
+                //TESTE();
+                Config.TESTE();
                 MessageBox.Show("Falha ao salvar configurações!", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
