@@ -8,6 +8,7 @@ namespace MultiCam.UnitTests {
     public class Base {
         protected static string name_db_test;
         protected static string base_path_db;
+        protected static IContextDb context;
 
         [SetUp]
         public void SetUp() {
@@ -18,6 +19,8 @@ namespace MultiCam.UnitTests {
 
             Util.SetProperty(typeof(Consts), "NAME_FILE_DATA", name_db_test);
             Util.SetProperty(typeof(Consts), "CURRENT_PATH", Util.GetCurrentPath());
+
+            context = new SqLite();
         }
 
         [TearDown]

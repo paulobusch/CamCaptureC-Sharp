@@ -3,16 +3,41 @@ using System.Data.SQLite;
 using System.IO;
 
 namespace CapturaVideo.Model {
-    public static class SqLite {
+
+    /// <summary>
+    /// Database Context interface
+    /// </summary>
+    public interface IContextDb 
+    {
+        /// <summary>
+        /// Create connection SqLite database
+        /// </summary>
+        /// <returns>The method return an instance SQLiteConnection</returns>
+        SQLiteConnection NewConnection();
+
+        /// <summary>
+        /// Check database exists
+        /// </summary>
+        /// <returns>true if database finded</returns>
+        bool DatabaseExists();
+
+        /// <summary>
+        /// If not exists create database and tables
+        /// </summary>
+        void CreateDatabase();
+    }
+
+    public class SqLite : IContextDb 
+    {
         private static string _connectionString = $@"Data Source={Consts.CURRENT_PATH}\{Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}; Version=3;";
 
-        public static SQLiteConnection NewConnection() {
+        public SQLiteConnection NewConnection() {
             return new SQLiteConnection(_connectionString);
         }
-        public static bool DatabaseExists() {
+        public bool DatabaseExists() {
             return File.Exists($@"{Consts.CURRENT_PATH}\{Consts.DATA_PATH}\{Consts.NAME_FILE_DATA}");
         }
-        public static void CreateDatabase() {
+        public void CreateDatabase() {
             if (DatabaseExists())
                 return;
 

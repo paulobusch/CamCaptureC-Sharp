@@ -2,6 +2,6 @@
 
 namespace CapturaVideo.Model.Dtos {
     public class BaseDto {
-        public EDbState State = EDbState.Unchanged;
+        public virtual EDbState State { get; set; }
     }
 }

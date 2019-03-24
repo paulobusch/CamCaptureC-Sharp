@@ -11,7 +11,8 @@
     <AssemblyName>CapturaVideo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
@@ -41,6 +42,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\CapturaVideo.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -80,6 +82,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup>
@@ -127,9 +130,9 @@
     <Compile Include="Model\Dtos\BaseDto.cs" />
     <Compile Include="Model\Dtos\ConfigurationDto.cs" />
     <Compile Include="Model\Dtos\DeviceDto.cs" />
-    <Compile Include="Model\Dtos\Teste.cs" />
     <Compile Include="Model\Enums\EDbState.cs" />
     <Compile Include="Model\Enums\ELegendAlign.cs" />
+    <Compile Include="Model\Notification.cs" />
     <Compile Include="Model\SqlLite.cs" />
     <Compile Include="View\About.cs">
       <SubType>Form</SubType>

@@ -14,7 +14,7 @@ namespace MultiCam.UnitTests {
             var connection = Util.GetProperty<string>(typeof(SqLite), "_connectionString");
             Assert.NotNull(connection);
 
-            using (var cnn = SqLite.NewConnection()) {
+            using (var cnn = context.NewConnection()) {
                 cnn.Open();
                 Assert.AreEqual(cnn.State, ConnectionState.Open);
                 cnn.Close();
@@ -26,10 +26,10 @@ namespace MultiCam.UnitTests {
         public void DatabaseExists() {
             var fileDb = $@"{base_path_db}\{name_db_test}";
             File.Create(fileDb).Close();
-            Assert.True(SqLite.DatabaseExists());
+            Assert.True(context.DatabaseExists());
 
             File.Delete(fileDb);
-            Assert.False(SqLite.DatabaseExists());
+            Assert.False(context.DatabaseExists());
         }
 
         [Test]
@@ -37,8 +37,8 @@ namespace MultiCam.UnitTests {
             var tables = new List<string>();
             var listTables = "select name from sqlite_master where type='table' order by name";
 
-            SqLite.CreateDatabase();
-            using (var cnn = SqLite.NewConnection()) {
+            context.CreateDatabase();
+            using (var cnn = context.NewConnection()) {
                 cnn.Open();
                 using (var command = new SQLiteDataAdapter(listTables, cnn)) {
                     var dt = new DataTable();
@@ -48,7 +48,7 @@ namespace MultiCam.UnitTests {
                         tables.Add((string)row["name"]);
                 }
             }
-            SqLite.CreateDatabase();
+            context.CreateDatabase();
 
             Assert.Contains("devices", tables);
             Assert.Contains("configuration", tables);

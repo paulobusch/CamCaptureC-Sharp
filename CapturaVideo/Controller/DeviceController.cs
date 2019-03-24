@@ -32,9 +32,13 @@ namespace CapturaVideo.Model
         public static GroupBox box_image;
         public static Label lbl_link;
 
+        private static IConfiguration _configuration;
+
         #region Configuration
-        public static void LoadConfiguration()
+        public static void LoadConfiguration(IConfiguration configuration)
         {
+            _configuration = configuration;
+
             selected_device = 0;
             device_interface = new DeviceInterface();
             devices_capture = new Dictionary<int, DeviceCapture>();
@@ -45,7 +49,7 @@ namespace CapturaVideo.Model
 
             //define devices
             var filtro = new Filters();
-            Configuration = Config.LoadConfiguration();
+            Configuration = _configuration.LoadConfiguration();
             foreach (Filter cam in filtro.VideoInputDevices)
                 devices.Add(cam);
 

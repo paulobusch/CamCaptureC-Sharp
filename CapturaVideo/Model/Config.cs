@@ -7,15 +7,47 @@ using System.Windows.Forms;
 
 namespace CapturaVideo.Model
 {
-    public static class Config
+
+    /// <summary>
+    /// Configuration interface by inject dependency
+    /// </summary>
+    public interface IConfiguration
     {
-        public static ConfigurationDto LoadConfiguration(){
+        /// <summary>
+        /// Restore configuration by application
+        /// </summary>
+        /// <returns>The method return an instance ConfigurationDto</returns>
+        ConfigurationDto LoadConfiguration();
+
+        /// <summary>
+        /// Save Configuration application
+        /// </summary>
+        /// <param name="dto">Instance ConfigurationDto</param>
+        void SaveConfiguration(ConfigurationDto dto);
+    }
+
+    public class Config : IConfiguration
+    {
+        private readonly INotification _notification;
+        private readonly IContextDb _context;
+
+        /// <summary>
+        /// Contructor Configuration
+        /// </summary>
+        /// <param name="context">Implementation IContextDb</param>
+        /// <param name="notification">Implementation INotification</param>
+        public Config(IContextDb context, INotification notification)
+        {
+            _context = context;
+            _notification = notification;
+        }
+
+        public ConfigurationDto LoadConfiguration()
+        {
             // Check database
-            if (!SqLite.DatabaseExists()) {
-                SqLite.CreateDatabase();
-                var configurationDto = new ConfigurationDto();
-                configurationDto.State = EDbState.Create;
-                return configurationDto;
+            if (!_context.DatabaseExists()) {
+                _context.CreateDatabase();
+                return new ConfigurationDto();
             }
 
             // Load
@@ -50,7 +82,7 @@ namespace CapturaVideo.Model
                     where device.id_configuration=@IdConfiguration";
 
                 var configurationDto = null as ConfigurationDto;
-                using (var cnn = SqLite.NewConnection()) {
+                using (var cnn = _context.NewConnection()) {
                     cnn.Open();
                     configurationDto = cnn.Query<ConfigurationDto>(sqlSelectConfiguration, null).FirstOrDefault();
                     configurationDto.Devices = cnn.Query<DeviceDto>(sqlSelectDevices, new { IdConfiguration = configurationDto.Id });
@@ -58,22 +90,18 @@ namespace CapturaVideo.Model
 
                 return configurationDto;
             } catch (Exception){
-                MessageBox.Show("Falha ao carregar as configurações!", "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                _notification.FailMessage("Falha ao carregar as configurações!");
             }
             return new ConfigurationDto();
         }
-        public static bool TESTE() {
-            return true;
-        }
-        public static void SaveConfiguration(ConfigurationDto dto)
+
+        public void SaveConfiguration(ConfigurationDto dto)
         {
             // Check database
             if (dto.State == EDbState.Unchanged)
                 return;
-            if (!SqLite.DatabaseExists())
-                SqLite.CreateDatabase();
+            if (!_context.DatabaseExists())
+                _context.CreateDatabase();
             try
             {
                 var sqlInsertConfiguration = @"
@@ -92,7 +120,7 @@ namespace CapturaVideo.Model
                     insert into devices(moniker_string,id_configuration,width,height)
                     values(@MonikerString,(select id from configuration where is_last=1),@Width,@Height);";
 
-                using (var cnn = SqLite.NewConnection()) {
+                using (var cnn = _context.NewConnection()) {
                     cnn.Open();
 
                     // Configuration
@@ -127,12 +155,8 @@ namespace CapturaVideo.Model
                     dto.Devices.AsList<DeviceDto>().ForEach(x => x.State = EDbState.Unchanged);
                 }
             }
-            catch (Exception ex){
-                //TESTE();
-                Config.TESTE();
-                MessageBox.Show("Falha ao salvar configurações!", "Aviso",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+            catch (Exception){
+                _notification.FailMessage("Falha ao salvar configurações!");
             }
         }
     }

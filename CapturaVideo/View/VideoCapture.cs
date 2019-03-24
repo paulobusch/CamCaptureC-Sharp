@@ -13,9 +13,16 @@ namespace CapturaVideo
 {
     public partial class MultipleCaptureForm : Form
     {
+        private static IConfiguration _configuration;
+
         #region Form
         public MultipleCaptureForm()
         {
+            // Inject dependeicies
+            var notification = new Notification();
+            var context = new SqLite();
+            _configuration = new Config(context, notification);
+
             InitializeComponent();
         }
 
@@ -31,7 +38,7 @@ namespace CapturaVideo
             DeviceController.box_image = box_image;
             DeviceController.lbl_link = lbl_link;
 
-            DeviceController.LoadConfiguration();
+            DeviceController.LoadConfiguration(_configuration);
 
             //image icons
             var images = new ImageList();
@@ -65,7 +72,7 @@ namespace CapturaVideo
             DeviceController.StopAllDevices(false);
             // TODO: Implements automatic bind devices
             DeviceController.Configuration.Devices = DeviceController.BindDeviceConfiguration();
-            Config.SaveConfiguration(DeviceController.Configuration);
+            _configuration.SaveConfiguration(DeviceController.Configuration);
         }
         #endregion
 
@@ -211,7 +218,7 @@ namespace CapturaVideo
                     DeviceController.Configuration.State = EDbState.Update;
                     // TODO: Implements automatic bind devices
                     DeviceController.Configuration.Devices = DeviceController.BindDeviceConfiguration();
-                    Config.SaveConfiguration(DeviceController.Configuration);
+                    _configuration.SaveConfiguration(DeviceController.Configuration);
                     DeviceController.ApplyConfiguration();
                 }
             }

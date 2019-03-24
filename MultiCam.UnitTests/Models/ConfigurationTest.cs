@@ -1,15 +1,13 @@
-﻿using CapturaVideo.Model;
+﻿using NUnit.Framework;
+using Moq;
+
+using CapturaVideo.Model;
 using CapturaVideo.Model.Dtos;
 using CapturaVideo.Model.Enums;
-using Moq;
-using NUnit.Framework;
-using Smocks;
-using System;
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
-using Urasandesu.Prig;
 
 namespace MultiCam.UnitTests {
     [TestFixture]
@@ -17,18 +15,18 @@ namespace MultiCam.UnitTests {
 
         [Test]
         public void SaveAndLoadConfiguration() {
-            var devicesDto = new DeviceDto() {
-                ConfigurationId = Util.RandInt(),
-                MonikerString = Util.RandString(),
-                Size = new Size(Util.RandInt(), Util.RandInt()),
-                State = EDbState.Create
-            };
+            // Commom Arrage
+            var mockNotigication = new Mock<INotification>();
+            var config = new Config(context, mockNotigication.Object);
 
+
+            // ** Configuration ** //
+            // Arrage
             var fontFamily = FontFamily.Families[
                 Util.RandInt(0, FontFamily.Families.Length)];
 
             var configDto = new ConfigurationDto() {
-                Id = devicesDto.ConfigurationId,
+                Id = Util.RandInt(),
                 TimeInterval = Util.RandInt(),
                 EnableInterval = Util.RandBool(),
                 EnableServer = Util.RandBool(),
@@ -42,14 +40,15 @@ namespace MultiCam.UnitTests {
                 EnableStartMinimized = Util.RandBool(),
                 Font = new Font(fontFamily, Util.RandFloat()),
                 State = EDbState.Create,
-                Devices = new List<DeviceDto>() { devicesDto }
+                Devices = null
             };
 
-            Config.SaveConfiguration(configDto);
+            // Act
+            config.SaveConfiguration(configDto);
 
-            var configData = Config.LoadConfiguration();
+            var configData = config.LoadConfiguration();
 
-            // Configuration
+            // Assert
             Assert.NotNull(configData.Id);
             Assert.NotZero(configData.Id);
             Assert.AreEqual(configDto.TimeInterval, configData.TimeInterval);
@@ -66,6 +65,25 @@ namespace MultiCam.UnitTests {
             Assert.AreEqual(configDto.Font.FontFamily.Name, configData.Font.FontFamily.Name);
             Assert.AreEqual(configDto.Font.Size, configData.Font.Size);
             Assert.AreEqual(configDto.State, EDbState.Unchanged);
+            Assert.Null(configDto.Devices);
+
+
+            // ** Device ** //
+            // Arrage
+            var devicesDto = new DeviceDto()
+            {
+                ConfigurationId = configDto.Id,
+                MonikerString = Util.RandString(),
+                Size = new Size(Util.RandInt(), Util.RandInt()),
+                State = EDbState.Create
+            };
+            configDto.Devices = new List<DeviceDto>() { devicesDto };
+            configDto.State = EDbState.Create;
+
+            // Act
+            config.SaveConfiguration(configDto);
+
+            configData = config.LoadConfiguration();
 
             // Device
             Assert.NotNull(configData);
@@ -80,7 +98,57 @@ namespace MultiCam.UnitTests {
             Assert.AreEqual(devicesDto.Size.Width, deviceData.Size.Width);
             Assert.AreEqual(devicesDto.Size.Height, deviceData.Size.Height);
             Assert.AreEqual(devicesDto.State, EDbState.Unchanged);
-            
+        }
+
+        [Test]
+        public void FeedbackThrowSaveAndLoad() {
+            // Arrage
+            var mockNotigication = new Mock<INotification>();
+            var mockContextDb = new Mock<IContextDb>();
+            var mockConfigDto = new Mock<ConfigurationDto>();
+            var config = new Config(mockContextDb.Object, mockNotigication.Object);
+
+            mockConfigDto.Setup(m => m.State).Returns(EDbState.Create);
+            mockContextDb.Setup(m => m.DatabaseExists()).Returns(true);
+            mockContextDb.Setup(m => m.NewConnection()).Throws(new System.Exception());
+
+            // Act
+            config.SaveConfiguration(mockConfigDto.Object);
+            config.LoadConfiguration();
+
+            // Asset
+            mockNotigication.Verify(m => m.FailMessage(It.IsAny<string>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void EmptyDatabase()
+        {
+            // Commom Arrage
+            var mockNotigication = new Mock<INotification>();
+            var mockContextDb = new Mock<IContextDb>();
+            var mockConfigDto = new Mock<ConfigurationDto>();
+            var config = new Config(mockContextDb.Object, mockNotigication.Object);
+                        
+            // *** SaveConfiguration *** //
+            // Arrage
+            mockConfigDto.Setup(m => m.State).Returns(EDbState.Unchanged);
+
+            // Act
+            config.SaveConfiguration(mockConfigDto.Object);
+
+            // Assert
+            mockContextDb.Verify(m => m.NewConnection(), Times.Never());
+
+            // *** LoadConfiguration *** //
+            // Arrage
+            mockContextDb.Setup(m => m.DatabaseExists()).Returns(false);
+
+            // Act
+            config.LoadConfiguration();
+
+            // Assert
+            mockContextDb.Verify(m => m.CreateDatabase(), Times.Once());
+
         }
     }
 }
