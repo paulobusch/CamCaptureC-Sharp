@@ -104,6 +104,7 @@
     <Compile Include="Dtos\ComboboxItemDtoTest.cs" />
     <Compile Include="Dtos\ConfigurationDtoTest.cs" />
     <Compile Include="Dtos\DeviceDtoTest.cs" />
+    <Compile Include="Dtos\FieldsVideoCaptureDtoTest.cs" />
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\ConfigurationTest.cs" />
     <Compile Include="Models\SqLiteTest.cs" />

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using CapturaVideo.Model.Enums;
+using CapturaVideo.Model;
 using DirectX.Capture;
 
 namespace CapturaVideo.Model
 {
-    public class DeviceCapture
+    internal class DeviceCapture
     {
         internal int key;
         internal Image process_image;
@@ -53,7 +53,7 @@ namespace CapturaVideo.Model
                     device.font = null;
                     return;
                 }
-                device.font.FrameRate = DeviceController.Configuration.FrameRate;
+                device.font.FrameRate = Configuration.frame_rate;
                 device.font.NewFrame += NewFrame;
                 device.font.Start();
             }
@@ -83,19 +83,19 @@ namespace CapturaVideo.Model
         #endregion
 
         #region Video
-        public EDeviceState GetDeviceState(){
+        public DeviceState GetDeviceState(){
             if (_video?.recording ?? false)
-                return EDeviceState.Recording;
+                return DeviceState.Recording;
             else if (device.font?.Running ?? false)
-                return EDeviceState.Runing;
+                return DeviceState.Runing;
             else
-                return EDeviceState.Stoped;
+                return DeviceState.Stoped;
         }
         public void StartVideo()
         {
             if (_video == null)
             {
-                if (GetDeviceState() == EDeviceState.Stoped)
+                if (GetDeviceState() == DeviceState.Stoped)
                     StartDevice();
                 _video = new Video(this.key, device.resolution);
                 _video.StartRecording();
@@ -103,7 +103,7 @@ namespace CapturaVideo.Model
         }
         public void StopVideo()
         {
-            if (GetDeviceState() == EDeviceState.Recording)
+            if (GetDeviceState() == DeviceState.Recording)
             {
                 _video.StopRecording();
                 _video = null;

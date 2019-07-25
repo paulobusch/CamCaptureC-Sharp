@@ -2,7 +2,8 @@
 using System.Drawing;
 using System.Threading;
 using System.Diagnostics;
-using Accord.Video.FFMPEG;
+using CapturaVideo.Model;
+using AForge.Video.FFMPEG;
 
 namespace CapturaVideo.Model
 {
@@ -27,18 +28,15 @@ namespace CapturaVideo.Model
         public void StartRecording()
         {
             _writer = new VideoFileWriter();
-            _writer.Open($"{DeviceController.Configuration.PathSaveVideo}{DateTime.Now.ToString("yyyy-MM-dd HHmm")}-{_id_name}_.avi",
-                _resolution.Width, _resolution.Height, DeviceController.Configuration.FrameRate, VideoCodec.MPEG4, DeviceController.Configuration.BitRate);
+            _writer.Open($"{Configuration.path_save_video}{_id_name}_{DateTime.Now.ToString("hhmmss")}_.avi",
+                _resolution.Width, _resolution.Height, Configuration.frame_rate, VideoCodec.MPEG4, Configuration.bit_rate);
             _start_record = DateTime.Now;
             recording = true;
         }
         public void WriteFrame(Bitmap img)
         {
-            lock (_writer) {
-                _writer.WriteVideoFrame(img, TimeSpan.FromMilliseconds(
-                     DateTime.Now.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds - 
-                    _start_record.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds));
-            }
+            lock (_writer)
+                _writer.WriteVideoFrame(img, DateTime.Now - _start_record);
         }
         public void StopRecording()
         {
@@ -54,7 +52,7 @@ namespace CapturaVideo.Model
         #region Compress
         public static void CompressAllVideoThread()
         {
-            if (!DeviceController.Configuration.EnableCompressVideo)
+            if (!Configuration.compress_video)
                 return;
             if (_compress == null || (_compress.ThreadState & (System.Threading.ThreadState.Stopped | System.Threading.ThreadState.Unstarted)) != 0)
             {
@@ -70,7 +68,7 @@ namespace CapturaVideo.Model
                 StartInfo =
                 {
                     FileName = $@"{Consts.CURRENT_PATH}\{Consts.FFMPEG_PATH}\compressFiles.bat",
-                    Arguments = $"\"{DeviceController.Configuration.PathSaveVideo}*_.avi\" \"{Consts.CURRENT_PATH}\"",//filter media - source
+                    Arguments = $"\"{Configuration.path_save_video}*_.avi\" \"{Consts.CURRENT_PATH}\"",//filter media - source
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardInput = true

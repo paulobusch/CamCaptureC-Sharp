@@ -1,5 +1,5 @@
 ﻿using CapturaVideo.Model;
-using CapturaVideo.Model.Enums;
+using CapturaVideo.Model;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -18,33 +18,33 @@ namespace CapturaVideo
             InitFonts();
 
             //load config interface
-            txt_dir.Text = DeviceController.Configuration.PathSaveVideo;
-            bar_timer.Value = DeviceController.Configuration.TimeInterval;
-            bar_timer.Enabled = DeviceController.Configuration.EnableInterval;
-            bar_frame_rate.Value = DeviceController.Configuration.FrameRate;
-            bar_bit_rate.Value = DeviceController.Configuration.BitRate / 1000;
-            chk_enable_timer.Checked = DeviceController.Configuration.EnableInterval;
-            chk_web_difusion.Checked = DeviceController.Configuration.EnableServer;
-            chk_enable_compress.Checked = DeviceController.Configuration.EnableCompressVideo;
-            chk_date_time.Checked = DeviceController.Configuration.ViewDateTime;
-            cmb_font.Text = DeviceController.Configuration.Font.Size.ToString();
-            SetAlign(DeviceController.Configuration.LegendAlign);
+            txt_dir.Text = Configuration.path_save_video;
+            bar_timer.Value = Configuration.time_interval;
+            bar_timer.Enabled = Configuration.enable_interval;
+            bar_frame_rate.Value = (int)Configuration.frame_rate;
+            bar_bit_rate.Value = Configuration.bit_rate / 1000;
+            chk_enable_timer.Checked = Configuration.enable_interval;
+            chk_web_difusion.Checked = Configuration.enable_server;
+            chk_enable_compress.Checked = Configuration.compress_video;
+            chk_date_time.Checked = Configuration.show_date_time;
+            cmb_font.Text = Configuration.font.Size.ToString();
+            SetAlign(Configuration.legend_align);
         }
 
         #region Submit
         private void btn_ok_config_Click(object sender, EventArgs e)
         {
             //aply values
-            DeviceController.Configuration.PathSaveVideo = GetPath(txt_dir.Text);
-            DeviceController.Configuration.TimeInterval = bar_timer.Value;
-            DeviceController.Configuration.FrameRate = bar_frame_rate.Value;
-            DeviceController.Configuration.BitRate = bar_bit_rate.Value * 1000;
-            DeviceController.Configuration.EnableInterval = chk_enable_timer.Checked;
-            DeviceController.Configuration.EnableServer = chk_web_difusion.Checked;
-            DeviceController.Configuration.EnableCompressVideo = chk_enable_compress.Checked;
-            DeviceController.Configuration.ViewDateTime = chk_date_time.Checked;
-            DeviceController.Configuration.Font = new Font(DeviceController.Configuration.Font.FontFamily, Convert.ToInt32(cmb_font.Text));
-            DeviceController.Configuration.LegendAlign = GetAlign();
+            Configuration.path_save_video = GetPath(txt_dir.Text);
+            Configuration.time_interval = bar_timer.Value;
+            Configuration.frame_rate = bar_frame_rate.Value;
+            Configuration.bit_rate = bar_bit_rate.Value * 1000;
+            Configuration.enable_interval = chk_enable_timer.Checked;
+            Configuration.enable_server = chk_web_difusion.Checked;
+            Configuration.compress_video = chk_enable_compress.Checked;
+            Configuration.show_date_time = chk_date_time.Checked;
+            Configuration.font = new Font(Configuration.font.FontFamily, Convert.ToInt32(cmb_font.Text));
+            Configuration.legend_align = GetAlign();
 
             //finish
             save = true;
@@ -82,7 +82,7 @@ namespace CapturaVideo
 
             //aplly values
             if(!chk_enable_timer.Checked)
-                bar_timer.Value = DeviceController.Configuration.TimeInterval;
+                bar_timer.Value = Configuration.time_interval;
         }
         #endregion
 
@@ -104,46 +104,46 @@ namespace CapturaVideo
 
             //aplly values
             if (!chk_date_time.Checked){
-                cmb_font.Text = DeviceController.Configuration.Font.Size.ToString();
-                SetAlign(DeviceController.Configuration.LegendAlign);
+                cmb_font.Text = Configuration.font.Size.ToString();
+                SetAlign(Configuration.legend_align);
             }
         }
         #endregion
 
         #region Legend Align
-        public void SetAlign(ELegendAlign align)
+        public void SetAlign(LegendAlign align)
         {
-            chk_top_left.Checked = align == ELegendAlign.TopLeft;
-            chk_top_right.Checked = align == ELegendAlign.TopRight;
-            chk_botton_left.Checked = align == ELegendAlign.BottonLeft;
-            chk_botton_right.Checked = align == ELegendAlign.BottonRight;
+            chk_top_left.Checked = align == LegendAlign.TopLeft;
+            chk_top_right.Checked = align == LegendAlign.TopRight;
+            chk_botton_left.Checked = align == LegendAlign.BottonLeft;
+            chk_botton_right.Checked = align == LegendAlign.BottonRight;
         }
-        public ELegendAlign GetAlign()
+        public LegendAlign GetAlign()
         {
             if (chk_top_left.Checked)
-                return ELegendAlign.TopLeft;
+                return LegendAlign.TopLeft;
             if (chk_top_right.Checked)
-                return ELegendAlign.TopRight;
+                return LegendAlign.TopRight;
             if (chk_botton_left.Checked)
-                return ELegendAlign.BottonLeft;
+                return LegendAlign.BottonLeft;
 
-            return ELegendAlign.BottonRight;
+            return LegendAlign.BottonRight;
         }
         private void chk_top_left_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.TopLeft);
+            SetAlign(LegendAlign.TopLeft);
         }
         private void chk_top_right_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.TopRight);
+            SetAlign(LegendAlign.TopRight);
         }
         private void chk_botton_right_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.BottonRight);
+            SetAlign(LegendAlign.BottonRight);
         }
         private void chk_botton_left_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.BottonLeft);
+            SetAlign(LegendAlign.BottonLeft);
         }
         #endregion
 

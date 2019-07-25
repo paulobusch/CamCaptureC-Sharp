@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\ILMerge.3.0.21\build\ILMerge.props" Condition="Exists('..\packages\ILMerge.3.0.21\build\ILMerge.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6B785CC7-FC00-454F-9A73-847C9BD11908}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>CapturaVideo</RootNamespace>
-    <AssemblyName>CapturaVideo</AssemblyName>
+    <RootNamespace>MultiCam</RootNamespace>
+    <AssemblyName>MultiCam</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -42,7 +41,8 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\CapturaVideo.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,8 +58,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>cam.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -74,13 +73,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -98,8 +98,8 @@
     <Reference Include="Accord.Video.FFMPEG, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=x86">
       <HintPath>..\packages\Accord.Video.FFMPEG.3.8.0\lib\net45\Accord.Video.FFMPEG.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.40\lib\net35\Dapper.dll</HintPath>
+    <Reference Include="Dapper, Version=1.30.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.30\lib\net45\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="DirectX.Capture">
       <HintPath>..\DirectX.Capture\bin\Debug\DirectX.Capture.dll</HintPath>
@@ -107,9 +107,13 @@
     <Reference Include="DShowNET">
       <HintPath>..\DShowNET\bin\Debug\DShowNET.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -127,57 +131,78 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Dtos\BaseDto.cs" />
-    <Compile Include="Model\Dtos\ConfigurationDto.cs" />
-    <Compile Include="Model\Dtos\DeviceDto.cs" />
-    <Compile Include="Model\Enums\EDbState.cs" />
-    <Compile Include="Model\Enums\ELegendAlign.cs" />
-    <Compile Include="Model\Notification.cs" />
-    <Compile Include="Model\SqlLite.cs" />
-    <Compile Include="View\About.cs">
+    <Compile Include="Areas\App\Model\Dtos\FrameDto.cs" />
+    <Compile Include="Areas\Config\Model\Repository\ConfigRepository.cs" />
+    <Compile Include="Areas\Grid\Controller\GridController.cs" />
+    <Compile Include="Areas\Grid\View\Grid.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\About.Designer.cs">
-      <DependentUpon>About.cs</DependentUpon>
+    <Compile Include="Areas\Grid\View\Grid.Designer.cs">
+      <DependentUpon>Grid.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Dtos\ComboboxItemDto.cs" />
-    <Compile Include="Model\Config.cs" />
-    <Compile Include="Model\Consts.cs" />
-    <Compile Include="Model\DeviceCapture.cs" />
-    <Compile Include="Controller\DeviceController.cs" />
-    <Compile Include="Model\DeviceInterface.cs" />
-    <Compile Include="Model\Enums\EDeviceState.cs" />
-    <Compile Include="Model\Helpers.cs" />
-    <Compile Include="Model\LegendAlign.cs" />
-    <Compile Include="Model\Log.cs" />
-    <Compile Include="Model\Video.cs" />
-    <Compile Include="View\Configuration.cs">
+    <Compile Include="DataContext\EntityBase.cs" />
+    <Compile Include="Areas\App\Model\Repository\DeviceRepository.cs" />
+    <Compile Include="Areas\Config\Model\Entities\Configuration.cs" />
+    <Compile Include="Areas\App\Model\Entities\Device.cs" />
+    <Compile Include="Areas\App\Model\Enums\EDbState.cs" />
+    <Compile Include="Areas\App\Model\Enums\ELegendAlign.cs" />
+    <Compile Include="Areas\Info\Controller\AboutController.cs" />
+    <Compile Include="Areas\Notify\View\NotifyView.cs" />
+    <Compile Include="DataContext\UnitOfWork.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\IController.cs" />
+    <Compile Include="Interfaces\IModel.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Interfaces\IView.cs" />
+    <Compile Include="Areas\Notify\Controller\NotifyController.cs" />
+    <Compile Include="DataContext\ContextDb.cs" />
+    <Compile Include="Areas\Info\View\Info.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Configuration.Designer.cs">
+    <Compile Include="Areas\Info\View\Info.Designer.cs">
+      <DependentUpon>Info.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\App\Model\Dtos\CboItemDto.cs" />
+    <Compile Include="Areas\Config\Controller\ConfigController.cs" />
+    <Compile Include="Areas\App\Model\Consts.cs" />
+    <Compile Include="Areas\App\Model\VideoCapture.cs" />
+    <Compile Include="Areas\App\Controller\AppController.cs" />
+    <Compile Include="Areas\App\Model\Enums\EDeviceState.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="Areas\App\Model\LegendAlign.cs" />
+    <Compile Include="Areas\Log\Controller\Log.cs" />
+    <Compile Include="Areas\App\Model\Video.cs" />
+    <Compile Include="Areas\Config\View\Configuration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Config\View\Configuration.Designer.cs">
       <DependentUpon>Configuration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\ServerHttpListener.cs" />
+    <Compile Include="Areas\Server\Controller\ServerHttpListener.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\VideoCapture.cs">
+    <Compile Include="Areas\App\View\VideoCapture.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\VideoCapture.Designer.cs">
+    <Compile Include="Areas\App\View\VideoCapture.Designer.cs">
       <DependentUpon>VideoCapture.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="MultiCam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="View\About.resx">
-      <DependentUpon>About.cs</DependentUpon>
+    <Compile Include="RegServices.cs" />
+    <EmbeddedResource Include="Areas\Grid\View\Grid.resx">
+      <DependentUpon>Grid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Configuration.resx">
+    <EmbeddedResource Include="Areas\Info\View\Info.resx">
+      <DependentUpon>Info.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Config\View\Configuration.resx">
       <DependentUpon>Configuration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\VideoCapture.resx">
+    <EmbeddedResource Include="Areas\App\View\VideoCapture.resx">
       <DependentUpon>VideoCapture.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -205,7 +230,6 @@
   <ItemGroup>
     <None Include="Resources\image1.png" />
     <None Include="Resources\image.png" />
-    <None Include="bin\Debug\web_pages\img\foto.jpg" />
     <None Include="Resources\info.png" />
     <None Include="Resources\video_stop1.png" />
     <None Include="Resources\save.png" />
@@ -227,12 +251,38 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\include-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tools-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\remove-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoom-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1x1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cam.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Este projeto faz referência a pacotes do NuGet que não estão presentes neste computador. Use a Restauração de Pacotes do NuGet para baixá-los.  Para obter mais informações, consulte http://go.microsoft.com/fwlink/?LinkID=322105. O arquivo ausente é {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\ILMerge.3.0.21\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILMerge.3.0.21\build\ILMerge.props'))" />
     <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
     <Error Condition="!Exists('..\packages\Accord.Video.FFMPEG.3.8.0\build\Accord.Video.FFMPEG.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.Video.FFMPEG.3.8.0\build\Accord.Video.FFMPEG.targets'))" />
   </Target>

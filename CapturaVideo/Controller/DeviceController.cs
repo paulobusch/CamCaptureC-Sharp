@@ -1,5 +1,4 @@
-﻿using CapturaVideo.Model.Dtos;
-using CapturaVideo.Model.Enums;
+﻿using CapturaVideo.Model;
 using DirectX.Capture;
 using System;
 using System.Collections.Generic;
@@ -10,47 +9,41 @@ using WebServer.Models;
 
 namespace CapturaVideo.Model
 {
-    public static class DeviceController
+    internal static class DeviceController
     {
         //public
-        public static int selected_device;
-        public static List<Filter> devices;
-        public static DeviceInterface device_interface;
-        public static ConfigurationDto Configuration;
+        internal static int selected_device;
+        internal static List<Filter> devices;
+        internal static DeviceInterface device_interface;
 
         //private
         private static Dictionary<int, DeviceCapture> devices_capture;
 
         //constrols
-        public static ListView list_view_devices;
-        public static Timer timer_video_interval;
-        public static PictureBox image_grid;
-        public static PictureBox image_state;
+        internal static ListView list_view_devices;
+        internal static Timer timer_video_interval;
+        internal static PictureBox image_grid;
+        internal static PictureBox image_state;
 
-        public static ComboBox cmb_device;
-        public static ComboBox cmb_resolution;
-        public static GroupBox box_image;
-        public static Label lbl_link;
-
-        private static IConfiguration _configuration;
+        internal static ComboBox cmb_device;
+        internal static ComboBox cmb_resolution;
+        internal static GroupBox box_image;
+        internal static Label lbl_link;
 
         #region Configuration
-        public static void LoadConfiguration(IConfiguration configuration)
+        public static void LoadConfiguration()
         {
-            _configuration = configuration;
-
             selected_device = 0;
             device_interface = new DeviceInterface();
             devices_capture = new Dictionary<int, DeviceCapture>();
             devices = new List<Filter>();
 
             //check infraestructure
-            //new SqLite().CreateTablesIfNotExists();
+             new SqLite().CreateTablesIfNotExists();
 
             //define devices
-            var filtro = new Filters();
-            Configuration = _configuration.LoadConfiguration();
-            foreach (Filter cam in filtro.VideoInputDevices)
+            Configuration.LoadConfiguration();
+            foreach (Filter cam in new Filters().VideoInputDevices)
                 devices.Add(cam);
 
             //init controls interface
@@ -64,7 +57,7 @@ namespace CapturaVideo.Model
             //start services
             try
             {
-                if (Configuration.EnableServer)
+                if (Configuration.enable_server)
                     ServerHttpListener.StratThread();
                 else
                     ServerHttpListener.StopThread();
@@ -78,32 +71,32 @@ namespace CapturaVideo.Model
 
 
             //link
-            lbl_link.Visible = Configuration.EnableServer;
+            lbl_link.Visible = Configuration.enable_server;
 
             //update device
             IterateDevices(x => x.Value.UpdateConfiguration());
 
             //timer interval
-            if (Configuration.EnableInterval) {
+            if (Configuration.enable_interval) {
                     StartAllDevices();
                     StartAllVideo();
             }
 
             timer_video_interval.Enabled = false;
-            timer_video_interval.Interval = (Configuration.TimeInterval * 60000);
-            timer_video_interval.Enabled = Configuration.EnableInterval;
+            timer_video_interval.Interval = (Configuration.time_interval * 60000);
+            timer_video_interval.Enabled = Configuration.enable_interval;
         }
         public static void RestoreDevicesConfiguration() {
-            foreach (var cam in Configuration.Devices)
+            foreach (KeyValuePair<string, Size> cam in Configuration.devices_config)
             {
                 //aplly values interface
-                var info = devices.Find(x => x.MonikerString == cam.MonikerString);
+                var info = devices.Find(x => x.MonikerString == cam.Key);
                 try
                 {
                     if (info != null)
                     {
                         device_interface.info = info;
-                        device_interface.resolution = cam.Size;
+                        device_interface.resolution = cam.Value;
 
                         NewDevice();
                     }
@@ -115,14 +108,13 @@ namespace CapturaVideo.Model
                 }
             }
         }
-        public static IEnumerable<DeviceDto> BindDeviceConfiguration()
+        public static Dictionary<string, Size> BindDeviceConfiguration()
         {
-            foreach(var device in devices_capture) { 
-                yield return new DeviceDto() {
-                    MonikerString = device.Value.device.info.MonikerString,
-                    Size = device.Value.device.resolution
-                };
-            };
+            var devices_config = new Dictionary<string, Size>();
+            IterateDevices(x => {
+                devices_config.Add(x.Value.device.info.MonikerString, x.Value.device.resolution);
+            });
+            return devices_config;
         }
         #endregion
 
@@ -153,13 +145,13 @@ namespace CapturaVideo.Model
 
             LoadDevice();
         }
-        public static void ChangeAllIconState(EDeviceState st)
+        public static void ChangeAllIconState(DeviceState st)
         {
             var stInt = (int)st;
             foreach (ListViewItem item in list_view_devices.Items)
                 item.ImageIndex = stInt;
         }
-        public static void ChangeIconState(int key, EDeviceState st)
+        public static void ChangeIconState(int key, DeviceState st)
         {
             foreach (ListViewItem item in list_view_devices.Items)
             {
@@ -179,10 +171,10 @@ namespace CapturaVideo.Model
                 foreach (KeyValuePair<int, DeviceCapture> dev in devices_capture)
                     task(dev);
         }
-        public static EDeviceState GetStateCurrentDevice()
+        public static DeviceState GetStateCurrentDevice()
         {
             var dev = GetDevice(selected_device);
-            return dev?.GetDeviceState() ?? EDeviceState.Stoped;
+            return dev?.GetDeviceState() ?? DeviceState.Stoped;
         }
         public static DeviceCapture GetDevice(int key) {
             DeviceCapture ret;
@@ -198,19 +190,19 @@ namespace CapturaVideo.Model
         }
         public static void StartAllDevices() {
             IterateDevices(x => x.Value.StartDevice());
-            ChangeAllIconState(EDeviceState.Runing);
+            ChangeAllIconState(DeviceState.Runing);
         }
         public static void StopAllDevices(bool refreshIcons = true) {
             IterateDevices(x => x.Value.StopDevice());
             if(refreshIcons)
-                ChangeAllIconState(EDeviceState.Stoped);
+                ChangeAllIconState(DeviceState.Stoped);
         }
         public static void LoadDevice()
         {
             //list devices
             FillCombobox(cmb_device, devices.ToArray(), x => {
                 var y = (Filter)x;
-                return new ComboboxItemDto { Name = y.Name, Value = y };
+                return new ComboboxItem { Name = y.Name, Value = y };
             }, null, "Nenhum dispositivo");
         }
         #endregion
@@ -221,10 +213,10 @@ namespace CapturaVideo.Model
             //update resolutions
             FillCombobox(cmb_resolution, Consts.RESOLUTION, x => {
                 var y = (Size)x;
-                return new ComboboxItemDto { Name = $"{y.Width} x {y.Height}", Value = y };                 
+                return new ComboboxItem { Name = $"{y.Width} x {y.Height}", Value = y };                 
             }, "640 x 480", "[Vazio]");
         }
-        private static void FillCombobox(ComboBox cmb, Array collection, Func<object, ComboboxItemDto> action, string defull = null, string empty = null)
+        private static void FillCombobox(ComboBox cmb, Array collection, Func<object, ComboboxItem> action, string defull = null, string empty = null)
         {
             cmb.Items.Clear();
             foreach (var item in collection)
@@ -250,15 +242,15 @@ namespace CapturaVideo.Model
                 x.Value.StopVideo();
                 x.Value.StartVideo();
             });
-            ChangeAllIconState(EDeviceState.Recording);
+            ChangeAllIconState(DeviceState.Recording);
         }
         public static void StartAllVideo() {
             IterateDevices(x => x.Value.StartVideo());
-            ChangeAllIconState(EDeviceState.Recording);
+            ChangeAllIconState(DeviceState.Recording);
         }
         public static void StopAllVideo() {
             IterateDevices(x => x.Value.StopVideo());
-            ChangeAllIconState(EDeviceState.Runing);
+            ChangeAllIconState(DeviceState.Runing);
         }
         #endregion
 
@@ -294,7 +286,6 @@ namespace CapturaVideo.Model
             var new_key = devices_capture.Count > 0 ? devices_capture.Keys.Max() + 1 : 1;
             lock(devices_capture)
                 devices_capture.Add(new_key, new DeviceCapture() { key = new_key, device = device_interface.Clone() });
-            Configuration.State = EDbState.Update;
             GetDevice(new_key).ReserveDevice();
             selected_device = new_key;
             FillListView();
@@ -305,7 +296,6 @@ namespace CapturaVideo.Model
             {
                 var key = (int)list_view_devices.SelectedItems[0].Tag;
                 GetDevice(key).device = device_interface.Clone();
-                Configuration.State = EDbState.Update;
                 FillListView();
             }   
         }
@@ -319,7 +309,6 @@ namespace CapturaVideo.Model
                 GetDevice(key).RestoreDevice();
                 lock(devices_capture)
                     devices_capture.Remove(key);
-                Configuration.State = EDbState.Update;
                 FillListView();
             }
         }
