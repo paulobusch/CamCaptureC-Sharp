@@ -5,10 +5,6 @@ using System.Diagnostics;
 
 using Accord.Video.FFMPEG;
 using System.IO;
-using System.Collections.Generic;
-using MultiCam.Areas.App.Model.Dtos;
-using System.Drawing.Imaging;
-using System.Threading.Tasks;
 
 namespace MultiCam.Model
 {
@@ -19,9 +15,8 @@ namespace MultiCam.Model
         private Size _resolution;
         private string _codenome;
         private DateTime _start_record;
-        private List<FrameDto> _frames = new List<FrameDto>();
+        private VideoFileWriter _writer;
         
-        private static Queue<Thread> _write = new Queue<Thread>();
         private static Thread _compress;
 
         #region Video
@@ -31,58 +26,36 @@ namespace MultiCam.Model
             this._codenome = codenome;
             recording = false;
         }
-        public void StartRecording()
+        public void StartRecording(string pathSaveVideo, int frameRate, int bitRate)
         {
-            recording = true;
-            _start_record = DateTime.Now;
-        }
-        public void WriteFrame(Bitmap img)
-        {
-            _frames.Add(new FrameDto{ 
-                bytes = Helpers.ToByteArray(img), 
-                time = DateTime.Now - _start_record 
-            });
-        }
-        public void StopRecording(string pathSaveVideo, int frameRate, int bitRate)
-        {
-            recording = false;            
-
             if (!Directory.Exists(pathSaveVideo))
                 Directory.CreateDirectory(pathSaveVideo);
 
-            var thread = new Thread(() =>
+            _writer = new VideoFileWriter();
+            _writer.Open($"{pathSaveVideo}{_codenome}_{DateTime.Now.ToString("yyyy-MM-dd HHmm")}_.avi",
+                _resolution.Width, _resolution.Height, frameRate, VideoCodec.MPEG4, bitRate);
+
+            _start_record = DateTime.Now;
+            recording = true;
+        }
+        public void WriteFrame(Bitmap img)
+        {
+            // TODO: Resolve bug library
+            try { 
+                lock(_writer)
+                    _writer.WriteVideoFrame(img, DateTime.Now - _start_record);
+            }catch (Exception) { }
+        }
+        public void StopRecording()
+        {
+            recording = false;
+            lock (_writer)
             {
-                var writer = new VideoFileWriter();
-                writer.Open($"{pathSaveVideo}{_codenome}_{DateTime.Now.ToString("yyyy-MM-dd HHmm")}_.avi",
-                    _resolution.Width, _resolution.Height, frameRate, VideoCodec.MPEG4, bitRate);
-
-                _frames.ForEach(frame =>
-                {
-                    try
-                    {
-                        using (var image = Image.FromStream(new MemoryStream(frame.bytes)))
-                            writer.WriteVideoFrame((Bitmap)image, frame.time);
-                    }
-                    catch (Exception) { }
-                });
-
-                _frames.Clear();
-
-                writer.Close();
-                writer.Dispose();
-                GC.Collect();
-            });
-
-            _write.Enqueue(thread);
-
-            if (_write.Peek().ThreadState != System.Threading.ThreadState.Running)
-            {
-                Task.Run(() =>
-                {
-                    while (_write.Count > 0)
-                        _write.Dequeue().Start();
-                });
+                _writer.Close();
+                _writer = null;
             }
+
+            GC.Collect();
         }
         #endregion
 

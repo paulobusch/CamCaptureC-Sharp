@@ -120,10 +120,14 @@ namespace MultiCam.Model
         {
             if (_video == null)
             {
+                var path = _controller.Config.PathSaveVideo;
+                if (_controller.Config.FolderFormat != null)
+                    path += $@"{DateTime.Now.ToString(_controller.Config.FolderFormat)}\";
+                path += $@"{CodNome}\";
                 if (_state == EDeviceState.Stoped)
                     StartDevice();
                 _video = new Video(CodNome, Size);
-                _video.StartRecording();
+                _video.StartRecording(path, _controller.Config.FrameRate, _controller.Config.BitRate);
                 _state = EDeviceState.Recording;
             }
         }
@@ -131,10 +135,7 @@ namespace MultiCam.Model
         {
             if (_state == EDeviceState.Recording)
             {
-                var path = _controller.Config.PathSaveVideo;
-                if (_controller.Config.FolderFormat != null)
-                    path += $@"{DateTime.Now.ToString(_controller.Config.FolderFormat)}\";
-                _video.StopRecording(path, _controller.Config.FrameRate, _controller.Config.BitRate);
+                _video.StopRecording();
                 _video = null;
                 _state = EDeviceState.Runing;
                 if(_controller.Config.EnableCompressVideo)
