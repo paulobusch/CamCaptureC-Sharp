@@ -58,7 +58,8 @@ namespace MultiCam.DataContext{
 	                font_size real,
 	                enable_start bit,
 	                enable_start_minimized bit,
-                    folder_format varchar(10)
+                    folder_format varchar(10),
+                    separate_registers_cameras bit
                 );
 
                 create table devices(

@@ -20,6 +20,7 @@ namespace MultiCam.Config.Model.Dtos{
         public ELegendAlign LegendAlign { get; set; }
         public bool EnableStart { get; set; }
         public bool EnableStartMinimized { get; set; }
+        public bool SeparateRegistersCameras { get; set; }
         public Font Font {
             get {
                 if (_font == null)
@@ -47,6 +48,7 @@ namespace MultiCam.Config.Model.Dtos{
             // Video
             this.ViewLegend = false;
             this.EnableCompressVideo = false;
+            this.SeparateRegistersCameras = false;
             this.PathSaveVideo = $@"{Consts.CURRENT_PATH}\";
             this.FrameRate = 15;
             this.BitRate = 100000;

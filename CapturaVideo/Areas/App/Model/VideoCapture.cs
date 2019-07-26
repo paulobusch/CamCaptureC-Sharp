@@ -123,7 +123,8 @@ namespace MultiCam.Model
                 var path = _controller.Config.PathSaveVideo;
                 if (_controller.Config.FolderFormat != null)
                     path += $@"{DateTime.Now.ToString(_controller.Config.FolderFormat)}\";
-                path += $@"{CodNome}\";
+                if(_controller.Config.SeparateRegistersCameras)
+                    path += $@"{CodNome}\";
                 if (_state == EDeviceState.Stoped)
                     StartDevice();
                 _video = new Video(CodNome, Size);

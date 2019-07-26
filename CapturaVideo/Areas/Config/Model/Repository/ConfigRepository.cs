@@ -31,17 +31,16 @@ namespace MultiCam.Config.Repository
                 insert into configuration(time_interval,
                 enable_interval,enable_server,enable_compress_video,view_date_time,
                 path_save_video,frame_rate,bit_rate,legend_align,font_family,font_size,
-                enable_start,enable_start_minimized,folder_format)
+                enable_start,enable_start_minimized,folder_format,separate_registers_cameras)
 
                 values(@TimeInterval,@EnableInterval,@EnableServer,@EnableCompressVideo,
-                @ViewLegend,@PathSaveVideo,@FrameRate,@BitRate,@LegendAlign,
-                @FontFamily,@FontSize,@EnableStart,@EnableStartMinimized,@FolderFormat);";
+                @ViewLegend,@PathSaveVideo,@FrameRate,@BitRate,@LegendAlign,@FontFamily,
+                @FontSize,@EnableStart,@EnableStartMinimized,@FolderFormat,@SeparateRegistersCameras);";
 
             var sqlIdent = @"select last_insert_rowid();";
 
             using (var cnn = _context.NewConnection())
             {
-                //cnn.exe();
                 using (var command = new SQLiteCommand(sqlInsert, cnn))
                 {
                     cnn.Open();
@@ -84,7 +83,8 @@ namespace MultiCam.Config.Repository
 	                config.font_size as _fontSize,
 	                config.enable_start as EnableStart,
 	                config.enable_start_minimized as EnableStartMinimized,
-                    config.folder_format as FolderFormat
+                    config.folder_format as FolderFormat,
+                    config.separate_registers_cameras as SeparateRegistersCameras
                 from configuration config";
 
             var data = null as IEnumerable<Configuration>;
@@ -115,7 +115,8 @@ namespace MultiCam.Config.Repository
 	                config.font_size as _fontSize,
 	                config.enable_start as EnableStart,
 	                config.enable_start_minimized as EnableStartMinimized,
-                    config.folder_format as FolderFormat
+                    config.folder_format as FolderFormat,
+                    config.separate_registers_cameras as SeparateRegistersCameras
                 from configuration config
                 where config.id=@Id";
 
@@ -146,7 +147,8 @@ namespace MultiCam.Config.Repository
 	                font_size=@FontSize,
 	                enable_start=@EnableStart,
 	                enable_start_minimized=@EnableStartMinimized,
-                    folder_format=@FolderFormat
+                    folder_format=@FolderFormat,
+                    separate_registers_cameras=@SeparateRegistersCameras
                 where id=@Id";
 
             using (var cnn = _context.NewConnection())
@@ -173,7 +175,8 @@ namespace MultiCam.Config.Repository
                 FontSize = entity.Font.Size,
                 entity.EnableStart,
                 entity.EnableStartMinimized,
-                entity.FolderFormat
+                entity.FolderFormat,
+                entity.SeparateRegistersCameras
             };
         }
     }

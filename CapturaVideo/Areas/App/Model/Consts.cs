@@ -39,56 +39,5 @@ namespace MultiCam.Model
         // Graph
         public static Point LOCATION = new Point(0, 4);
         public static string FORMAT_DATE_TIME = "dd/MM/yyyy HH:mm:ss";
-
-        //TODO: Tipos de campos
-        //tables mapping [TableName, ColumnName, Type]
-        //public static Dictionary<string, Dictionary<string, Type>> TABLES_MAPPING =
-        //    new Dictionary<string, Dictionary<string, Type>>()
-        //    {
-        //        ["configuration"] = new Dictionary<string, Type>()
-        //        {
-        //            ["id_configuration"]       = typeof(PrimaryKey),
-        //            ["time_interval"]          = typeof(Int32),
-        //            ["enable_interval"]        = typeof(Boolean),
-        //            ["enable_server"]          = typeof(Boolean),
-        //            ["path_save_video"]        = typeof(String),
-        //            ["frame_rate"]             = typeof(Int32),
-        //            ["bit_rate"]               = typeof(Int32),
-        //            ["compress_video"]         = typeof(Boolean),
-        //            ["show_date_time"]         = typeof(Boolean),
-        //            ["legend_align"]           = typeof(Int32),
-        //            ["font_family"]            = typeof(String),
-        //            ["font_size"]              = typeof(Int32),
-        //            ["devices_config"]         = typeof(Devices),
-        //            ["start_window"]           = typeof(Boolean),
-        //            ["start_window_minimized"] = typeof(Boolean),
-        //            ["date_time"]              = typeof(DateTime),
-        //            ["is_last"]                = typeof(Boolean)
-        //        }
-        //    };
-
-        ////database
-        //public static Dictionary<Type, DbType> DB_TYPES =
-        //    new Dictionary<Type, DbType>()
-        //    {
-        //        [typeof(PrimaryKey)] = DbType.Int32,
-        //        [typeof(ForeignKey)] = DbType.Int32,
-        //        [typeof(String)] = DbType.String,
-        //        [typeof(Int32)] = DbType.Int32,
-        //        [typeof(Boolean)] = DbType.Boolean,
-        //        [typeof(Single)] = DbType.Single,
-        //        [typeof(DateTime)] = DbType.DateTime
-        //    };
-        //public static Dictionary<Type, string> DB_TYPES_TEXT =
-        //    new Dictionary<Type, string>()
-        //    {
-        //        [typeof(PrimaryKey)] = "integer primary key autoincrement",
-        //        [typeof(ForeignKey)] = "integer foreign key({0}) references {1}({2})",
-        //        [typeof(String)] = "text",
-        //        [typeof(Int32)] = "integer",
-        //        [typeof(Boolean)] = "bit",
-        //        [typeof(Single)] = "real",
-        //        [typeof(DateTime)] = "datetime"
-        //    };
     }
 }

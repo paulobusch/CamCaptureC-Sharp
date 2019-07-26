@@ -57,10 +57,11 @@
             this.lbl_year = new System.Windows.Forms.Label();
             this.bar_folder_name_precision = new System.Windows.Forms.TrackBar();
             this.lbl_forlder_name = new System.Windows.Forms.Label();
-            this.chk_separate_registers = new System.Windows.Forms.CheckBox();
+            this.chk_separate_registers_folders = new System.Windows.Forms.CheckBox();
             this.btn_search_dir = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chk_enable_compress = new System.Windows.Forms.CheckBox();
+            this.chk_separate_registers_cameras = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.bar_timer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bar_frame_rate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bar_bit_rate)).BeginInit();
@@ -225,7 +226,7 @@
             this.text_align.Controls.Add(this.chk_top_left);
             this.text_align.Controls.Add(this.pictureBox1);
             this.text_align.Controls.Add(this.chk_date_time);
-            this.text_align.Location = new System.Drawing.Point(12, 298);
+            this.text_align.Location = new System.Drawing.Point(12, 322);
             this.text_align.Name = "text_align";
             this.text_align.Size = new System.Drawing.Size(446, 221);
             this.text_align.TabIndex = 14;
@@ -320,18 +321,19 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chk_separate_registers_cameras);
             this.groupBox1.Controls.Add(this.lbl_day);
             this.groupBox1.Controls.Add(this.lbl_month);
             this.groupBox1.Controls.Add(this.lbl_year);
             this.groupBox1.Controls.Add(this.bar_folder_name_precision);
             this.groupBox1.Controls.Add(this.lbl_forlder_name);
-            this.groupBox1.Controls.Add(this.chk_separate_registers);
+            this.groupBox1.Controls.Add(this.chk_separate_registers_folders);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.btn_search_dir);
             this.groupBox1.Controls.Add(this.txt_dir);
             this.groupBox1.Location = new System.Drawing.Point(12, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(446, 286);
+            this.groupBox1.Size = new System.Drawing.Size(446, 310);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Diretórios";
@@ -340,7 +342,7 @@
             // 
             this.lbl_day.AutoSize = true;
             this.lbl_day.Enabled = false;
-            this.lbl_day.Location = new System.Drawing.Point(208, 244);
+            this.lbl_day.Location = new System.Drawing.Point(208, 216);
             this.lbl_day.Name = "lbl_day";
             this.lbl_day.Size = new System.Drawing.Size(29, 17);
             this.lbl_day.TabIndex = 27;
@@ -350,7 +352,7 @@
             // 
             this.lbl_month.AutoSize = true;
             this.lbl_month.Enabled = false;
-            this.lbl_month.Location = new System.Drawing.Point(119, 244);
+            this.lbl_month.Location = new System.Drawing.Point(119, 216);
             this.lbl_month.Name = "lbl_month";
             this.lbl_month.Size = new System.Drawing.Size(34, 17);
             this.lbl_month.TabIndex = 26;
@@ -360,7 +362,7 @@
             // 
             this.lbl_year.AutoSize = true;
             this.lbl_year.Enabled = false;
-            this.lbl_year.Location = new System.Drawing.Point(28, 244);
+            this.lbl_year.Location = new System.Drawing.Point(28, 216);
             this.lbl_year.Name = "lbl_year";
             this.lbl_year.Size = new System.Drawing.Size(33, 17);
             this.lbl_year.TabIndex = 25;
@@ -370,7 +372,7 @@
             // 
             this.bar_folder_name_precision.Enabled = false;
             this.bar_folder_name_precision.LargeChange = 1;
-            this.bar_folder_name_precision.Location = new System.Drawing.Point(28, 185);
+            this.bar_folder_name_precision.Location = new System.Drawing.Point(28, 157);
             this.bar_folder_name_precision.Margin = new System.Windows.Forms.Padding(0);
             this.bar_folder_name_precision.Maximum = 2;
             this.bar_folder_name_precision.Name = "bar_folder_name_precision";
@@ -383,22 +385,22 @@
             // 
             this.lbl_forlder_name.AutoSize = true;
             this.lbl_forlder_name.Enabled = false;
-            this.lbl_forlder_name.Location = new System.Drawing.Point(270, 185);
+            this.lbl_forlder_name.Location = new System.Drawing.Point(270, 157);
             this.lbl_forlder_name.Name = "lbl_forlder_name";
             this.lbl_forlder_name.Size = new System.Drawing.Size(68, 17);
             this.lbl_forlder_name.TabIndex = 24;
             this.lbl_forlder_name.Text = "Nome Ex:";
             // 
-            // chk_separate_registers
+            // chk_separate_registers_folders
             // 
-            this.chk_separate_registers.AutoSize = true;
-            this.chk_separate_registers.Location = new System.Drawing.Point(28, 131);
-            this.chk_separate_registers.Name = "chk_separate_registers";
-            this.chk_separate_registers.Size = new System.Drawing.Size(209, 21);
-            this.chk_separate_registers.TabIndex = 24;
-            this.chk_separate_registers.Text = "Separar registros em pastas";
-            this.chk_separate_registers.UseVisualStyleBackColor = true;
-            this.chk_separate_registers.CheckedChanged += new System.EventHandler(this.Chk_separate_registers_CheckedChanged);
+            this.chk_separate_registers_folders.AutoSize = true;
+            this.chk_separate_registers_folders.Location = new System.Drawing.Point(30, 127);
+            this.chk_separate_registers_folders.Name = "chk_separate_registers_folders";
+            this.chk_separate_registers_folders.Size = new System.Drawing.Size(209, 21);
+            this.chk_separate_registers_folders.TabIndex = 24;
+            this.chk_separate_registers_folders.Text = "Separar registros em pastas";
+            this.chk_separate_registers_folders.UseVisualStyleBackColor = true;
+            this.chk_separate_registers_folders.CheckedChanged += new System.EventHandler(this.Chk_separate_registers_CheckedChanged);
             // 
             // btn_search_dir
             // 
@@ -443,11 +445,21 @@
             this.chk_enable_compress.Text = "Compactação";
             this.chk_enable_compress.UseVisualStyleBackColor = true;
             // 
+            // chk_separate_registers_cameras
+            // 
+            this.chk_separate_registers_cameras.AutoSize = true;
+            this.chk_separate_registers_cameras.Location = new System.Drawing.Point(31, 269);
+            this.chk_separate_registers_cameras.Name = "chk_separate_registers_cameras";
+            this.chk_separate_registers_cameras.Size = new System.Drawing.Size(246, 21);
+            this.chk_separate_registers_cameras.TabIndex = 28;
+            this.chk_separate_registers_cameras.Text = "Separar registros de cada câmera";
+            this.chk_separate_registers_cameras.UseVisualStyleBackColor = true;
+            // 
             // ConfigurationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(959, 533);
+            this.ClientSize = new System.Drawing.Size(959, 582);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.text_align);
@@ -504,10 +516,11 @@
         private System.Windows.Forms.Label lbl_font;
         private System.Windows.Forms.ComboBox cmb_font;
         private System.Windows.Forms.Label lbl_forlder_name;
-        private System.Windows.Forms.CheckBox chk_separate_registers;
+        private System.Windows.Forms.CheckBox chk_separate_registers_folders;
         private System.Windows.Forms.Label lbl_day;
         private System.Windows.Forms.Label lbl_month;
         private System.Windows.Forms.Label lbl_year;
         private System.Windows.Forms.TrackBar bar_folder_name_precision;
+        private System.Windows.Forms.CheckBox chk_separate_registers_cameras;
     }
 }

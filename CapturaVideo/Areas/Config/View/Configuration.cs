@@ -5,9 +5,7 @@ using System.Windows.Forms;
 
 using MultiCam.Config.Controller;
 using MultiCam.Config.Model.Dtos;
-using MultiCam.Controller;
 using MultiCam.Model;
-using MultiCam.Model.Dtos;
 using MultiCam.Model.Enums;
 
 namespace MultiCam.Config.View
@@ -41,7 +39,8 @@ namespace MultiCam.Config.View
             chk_web_difusion.Checked = _config.EnableServer;
             chk_enable_compress.Checked = _config.EnableCompressVideo;
             chk_date_time.Checked = _config.ViewLegend;
-            chk_separate_registers.Checked = _config.FolderFormat != null;
+            chk_separate_registers_folders.Checked = _config.FolderFormat != null;
+            chk_separate_registers_cameras.Checked = _config.SeparateRegistersCameras;
             cmb_font.Text = _config.Font.Size.ToString();
             SetFolder(_config.FolderFormat);
             SetAlign(_config.LegendAlign);
@@ -62,6 +61,7 @@ namespace MultiCam.Config.View
             _config.EnableCompressVideo = chk_enable_compress.Checked;
             _config.ViewLegend = chk_date_time.Checked;
             _config.Font = new Font(_config.Font.FontFamily, int.Parse(cmb_font.Text));
+            _config.SeparateRegistersCameras = chk_separate_registers_cameras.Checked;
             _config.FolderFormat = GetFormat();
             _config.LegendAlign = GetAlign();
             _config.State = EDbState.Update;
@@ -73,7 +73,7 @@ namespace MultiCam.Config.View
 
         private string GetFormat()
         {
-            if(chk_separate_registers.Checked)
+            if(chk_separate_registers_folders.Checked)
                 return Consts.REGISTERS_FOLDER_NAME[bar_folder_name_precision.Value];
             return null;
         }
@@ -221,13 +221,13 @@ namespace MultiCam.Config.View
         private void Chk_separate_registers_CheckedChanged(object sender, EventArgs e)
         {
             //labels
-            lbl_year.Enabled = chk_separate_registers.Checked;
-            lbl_month.Enabled = chk_separate_registers.Checked;
-            lbl_day.Enabled = chk_separate_registers.Checked;
-            lbl_forlder_name.Enabled = chk_separate_registers.Checked;
+            lbl_year.Enabled = chk_separate_registers_folders.Checked;
+            lbl_month.Enabled = chk_separate_registers_folders.Checked;
+            lbl_day.Enabled = chk_separate_registers_folders.Checked;
+            lbl_forlder_name.Enabled = chk_separate_registers_folders.Checked;
 
             //bar
-            bar_folder_name_precision.Enabled = chk_separate_registers.Checked;
+            bar_folder_name_precision.Enabled = chk_separate_registers_folders.Checked;
         }
         private void SetFolder(string folderFormat)
         {
