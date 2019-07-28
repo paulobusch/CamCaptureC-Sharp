@@ -712,36 +712,37 @@ namespace DirectX.Capture
 				long avgTimePerFrame = (long) getStreamConfigSetting( videoStreamConfig, "AvgTimePerFrame" );
 				return( (double) 10000000 / avgTimePerFrame );
 			}
-			set
-			{
-				long avgTimePerFrame = (long) ( 10000000 / value );
+            set
+            {
+                long avgTimePerFrame = (long) ( 10000000 / value );
+                milissecondsPerFrame = (long)(1000 / value);
 				setStreamConfigSetting( videoStreamConfig, "AvgTimePerFrame", avgTimePerFrame );
 			}
 		}
 
-		/// <summary>
-		///  Gets and sets the frame size used to capture video.
-		/// </summary>
-		/// <remarks>
-		///  To change the frame size, assign a new Size object 
-		///  to this property <code>capture.Size = new Size( w, h );</code>
-		///  rather than modifying the size in place 
-		///  (capture.Size.Width = w;). Not all frame
-		///  rates are supported.
-		///  
-		/// <para>
-		///  Not all devices support getting/setting this property.
-		///  If this property is not supported, accessing it will
-		///  throw and exception. </para>
-		/// 
-		/// <para> 
-		///  This property cannot be changed while capturing. Changing 
-		///  this property while preview is enabled will cause some 
-		///  fickering while the internal filter graph is partially
-		///  rebuilt. Changing this property while cued will cancel the
-		///  cue. Call Cue() again to re-cue the capture. </para>
-		/// </remarks>
-		public Size FrameSize
+        /// <summary>
+        ///  Gets and sets the frame size used to capture video.
+        /// </summary>
+        /// <remarks>
+        ///  To change the frame size, assign a new Size object 
+        ///  to this property <code>capture.Size = new Size( w, h );</code>
+        ///  rather than modifying the size in place 
+        ///  (capture.Size.Width = w;). Not all frame
+        ///  rates are supported.
+        ///  
+        /// <para>
+        ///  Not all devices support getting/setting this property.
+        ///  If this property is not supported, accessing it will
+        ///  throw and exception. </para>
+        /// 
+        /// <para> 
+        ///  This property cannot be changed while capturing. Changing 
+        ///  this property while preview is enabled will cause some 
+        ///  fickering while the internal filter graph is partially
+        ///  rebuilt. Changing this property while cued will cancel the
+        ///  cue. Call Cue() again to re-cue the capture. </para>
+        /// </remarks>
+        public Size FrameSize
 		{
 			get
 			{
@@ -904,22 +905,25 @@ namespace DirectX.Capture
 		protected ISampleGrabber sampGrabber = null;	
 		private	VideoInfoHeader	videoInfoHeader;
 
-		public delegate void HeFrame(Bitmap bm);
+        public delegate void HeFrame(Bitmap bm);
 		public event HeFrame NewFrame;
 
 		private	byte[]					savedArray;
 		private	int						bufferedSize;
+		
+        private long milissecondsPerFrame;
+        private DateTime lastTimeFrame;
 
-		// ------------- Constructors/Destructors --------------
+        // ------------- Constructors/Destructors --------------
 
-		/// <summary> 
-		///  Create a new Capture object. 
-		///  videoDevice and audioDevice can be null if you do not 
-		///  wish to capture both audio and video. However at least
-		///  one must be a valid device. Use the <see cref="Filters"/> 
-		///  class to list available devices.
-		///  </summary>
-		public Capture(Filter videoDevice, Filter audioDevice)
+        /// <summary> 
+        ///  Create a new Capture object. 
+        ///  videoDevice and audioDevice can be null if you do not 
+        ///  wish to capture both audio and video. However at least
+        ///  one must be a valid device. Use the <see cref="Filters"/> 
+        ///  class to list available devices.
+        ///  </summary>
+        public Capture(Filter videoDevice, Filter audioDevice)
 		{
 			if ( videoDevice == null && audioDevice == null )
 				throw new ArgumentException( "The videoDevice and/or the audioDevice parameter must be set to a valid Filter.\n" );
@@ -978,6 +982,7 @@ namespace DirectX.Capture
             PreviewWindow = new PictureBox();
             GrapImg();
             Running = true;
+            lastTimeFrame = DateTime.Now;
         }
 
 		/// <summary> 
@@ -1071,7 +1076,7 @@ namespace DirectX.Capture
 				if ( VideoDevice != null )
 				{
 					videoDeviceFilter = (IBaseFilter) Marshal.BindToMoniker( VideoDevice.MonikerString );
-					hr = graphBuilder.AddFilter( videoDeviceFilter, "Video Capture Device" );
+                    hr = graphBuilder.AddFilter( videoDeviceFilter, "Video Capture Device" );
 					if( hr < 0 ) Marshal.ThrowExceptionForHR( hr );
 
 
@@ -1768,13 +1773,21 @@ namespace DirectX.Capture
 
 		int ISampleGrabberCB.BufferCB(double SampleTime, IntPtr pBuffer, int BufferLen )
 		{
+            var now = DateTime.Now;
+            var elapsed = now - lastTimeFrame;
+
+            if(elapsed.Milliseconds < milissecondsPerFrame)
+                return 0;
+
+            lastTimeFrame = now;
+
 			bufferedSize = BufferLen;
 			int w = videoInfoHeader.BmiHeader.Width;
 			int h = videoInfoHeader.BmiHeader.Height;
 			
 			int stride = w * 3;
-
-			Marshal.Copy( pBuffer, savedArray, 0, BufferLen );
+            
+            Marshal.Copy( pBuffer, savedArray, 0, BufferLen );
 
 			GCHandle handle = GCHandle.Alloc( savedArray, GCHandleType.Pinned );
 			int scan0 = (int) handle.AddrOfPinnedObject();

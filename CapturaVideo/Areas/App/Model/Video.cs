@@ -40,11 +40,8 @@ namespace MultiCam.Model
         }
         public void WriteFrame(Bitmap img)
         {
-            // TODO: Resolve bug library
-            try { 
-                lock(_writer)
-                    _writer.WriteVideoFrame(img, DateTime.Now - _start_record);
-            }catch (Exception) { }
+            lock(_writer)
+                _writer.WriteVideoFrame(img, DateTime.Now - _start_record);
         }
         public void StopRecording()
         {
