@@ -43,7 +43,7 @@ namespace MultiCam.Grid.View
                 var videoCapture = videosCapture.ElementAt(i);
                 var image = new PictureBox()
                 {
-                    Image = (Image)videoCapture.CurrentFrame.Clone(),
+                    Image = videoCapture.CurrentFrame,
                     SizeMode = PictureBoxSizeMode.Zoom,
                     Dock = DockStyle.Fill,
                     Height = heigt_image

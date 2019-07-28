@@ -33,7 +33,7 @@ namespace MultiCam.Model
 
             _writer = new VideoFileWriter();
             _writer.Open($"{pathSaveVideo}{_codenome}_{DateTime.Now.ToString("yyyy-MM-dd HHmm")}_.avi",
-                _resolution.Width, _resolution.Height, frameRate, VideoCodec.MPEG4, bitRate);
+                _resolution.Width, _resolution.Height, frameRate, VideoCodec.MSMPEG4v3, bitRate);
 
             _start_record = DateTime.Now;
             recording = true;

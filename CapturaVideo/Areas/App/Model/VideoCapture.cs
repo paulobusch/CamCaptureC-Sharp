@@ -24,9 +24,9 @@ namespace MultiCam.Model
         public Filter Info;
         public EDeviceState DeviceState { get; set; }
         public Image CurrentFrame { 
-            get { 
+            get {
                 lock(_process_image)
-                    return _process_image;
+                    return (Image)_process_image.Clone();
             } 
         }
 
@@ -116,6 +116,12 @@ namespace MultiCam.Model
         #endregion
 
         #region Video
+        public string GetImageBase64(){
+            byte[] bytes;
+            lock (_process_image)
+                 bytes = Helpers.ToByteArray(_process_image);
+            return Convert.ToBase64String(bytes);
+        }
         public void StartVideo()
         {
             if (_video == null)
@@ -163,7 +169,7 @@ namespace MultiCam.Model
                 _video.WriteFrame(bmp);
             bmp.Dispose();
         }
-
+        
         internal void ShowPropertyPage(Control elm)
         {
             _cap.PropertyPages[0].Show(elm);

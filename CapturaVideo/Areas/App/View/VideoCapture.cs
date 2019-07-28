@@ -9,7 +9,6 @@ using DirectX.Capture;
 using MultiCam.Controller;
 using MultiCam.Model;
 using MultiCam.Model.Dtos;
-using MultiCam.Model.Entities;
 using MultiCam.Model.Enums;
 using MultiCam.Notify.Controller;
 using MultiCam.Server.Controller;
@@ -88,15 +87,6 @@ namespace MultiCam.View
     /// </summary>
     public partial class MultipleCaptureForm : Form, IMultipleCaptureView
     {
-        ///// <summary>Devices List View</summary>
-        //public ListView ListViewDevices { get => list_view_devices; }
-
-        ///// <summary>List devices</summary>
-        //public ComboBox CmbDevices { get => cmb_device; }
-
-        ///// <summary>List resolutions</summary>
-        //public ComboBox CmbResolution { get => cmb_resolution; }
-
         private readonly IAppController _controller;
         private readonly INotifyController _notify;
 

@@ -424,7 +424,7 @@ namespace MultiCam.Controller
         public IDictionary<int, string> GetImages()
         {
             return _videosCapture
-                .ToDictionary(v => v.Id, v => Convert.ToBase64String(Helpers.ToByteArray(v.CurrentFrame)));
+                .ToDictionary(v => v.Id, v => v.GetImageBase64());
         }
         #endregion
     }

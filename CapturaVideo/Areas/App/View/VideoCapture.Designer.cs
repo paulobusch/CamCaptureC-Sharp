@@ -327,7 +327,6 @@ namespace MultiCam.View
             this.list_view_devices.ContextMenuStrip = this.menu_view_image;
             this.list_view_devices.FullRowSelect = true;
             this.list_view_devices.GridLines = true;
-            this.list_view_devices.HoverSelection = true;
             this.list_view_devices.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.list_view_devices.Location = new System.Drawing.Point(21, 106);
             this.list_view_devices.MultiSelect = false;

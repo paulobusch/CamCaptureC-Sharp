@@ -16,8 +16,7 @@ namespace MultiCam
         /// <returns></returns>
         public static byte[] ToByteArray(Image obj)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
+            using(var ms = new MemoryStream()) { 
                 obj.Save(ms, ImageFormat.Jpeg);
                 return ms.ToArray();
             }
