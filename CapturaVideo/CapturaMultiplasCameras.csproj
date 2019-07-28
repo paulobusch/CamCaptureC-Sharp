@@ -40,8 +40,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>cam.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -69,9 +68,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\AForge.Video.FFMPEG.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.40\lib\net35\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="DirectX.Capture">
       <HintPath>..\DirectX.Capture\bin\Debug\DirectX.Capture.dll</HintPath>
     </Reference>
@@ -98,11 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Dtos\BaseDto.cs" />
-    <Compile Include="Model\Dtos\ConfigurationDto.cs" />
-    <Compile Include="Model\Dtos\DeviceDto.cs" />
-    <Compile Include="Model\Enums\EDbState.cs" />
-    <Compile Include="Model\Enums\ELegendAlign.cs" />
+    <Compile Include="Model\DataTable.cs" />
     <Compile Include="Model\SqlLite.cs" />
     <Compile Include="View\About.cs">
       <SubType>Form</SubType>
@@ -116,7 +108,7 @@
     <Compile Include="Model\DeviceCapture.cs" />
     <Compile Include="Controller\DeviceController.cs" />
     <Compile Include="Model\DeviceInterface.cs" />
-    <Compile Include="Model\Enums\EDeviceState.cs" />
+    <Compile Include="Model\DeviceState.cs" />
     <Compile Include="Model\Helpers.cs" />
     <Compile Include="Model\LegendAlign.cs" />
     <Compile Include="Model\Log.cs" />
@@ -174,6 +166,8 @@
     <None Include="Resources\image1.png" />
     <None Include="Resources\image.png" />
     <None Include="bin\Debug\web_pages\img\foto.jpg" />
+    <Content Include="cam.ico" />
+    <Content Include="icon.ico" />
     <None Include="Resources\info.png" />
     <None Include="Resources\video_stop1.png" />
     <None Include="Resources\save.png" />

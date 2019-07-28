@@ -1,5 +1,5 @@
 ﻿using CapturaVideo.Model;
-using CapturaVideo.Model.Enums;
+using CapturaVideo.Model;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -18,33 +18,33 @@ namespace CapturaVideo
             InitFonts();
 
             //load config interface
-            txt_dir.Text = Configuration.Data.PathSaveVideo;
-            bar_timer.Value = Configuration.Data.TimeInterval;
-            bar_timer.Enabled = Configuration.Data.EnableInterval;
-            bar_frame_rate.Value = Configuration.Data.FrameRate;
-            bar_bit_rate.Value = Configuration.Data.BitRate / 1000;
-            chk_enable_timer.Checked = Configuration.Data.EnableInterval;
-            chk_web_difusion.Checked = Configuration.Data.EnableServer;
-            chk_enable_compress.Checked = Configuration.Data.EnableCompressVideo;
-            chk_date_time.Checked = Configuration.Data.ViewDateTime;
-            cmb_font.Text = Configuration.Data.Font.Size.ToString();
-            SetAlign(Configuration.Data.LegendAlign);
+            txt_dir.Text = Configuration.path_save_video;
+            bar_timer.Value = Configuration.time_interval;
+            bar_timer.Enabled = Configuration.enable_interval;
+            bar_frame_rate.Value = (int)Configuration.frame_rate;
+            bar_bit_rate.Value = Configuration.bit_rate / 1000;
+            chk_enable_timer.Checked = Configuration.enable_interval;
+            chk_web_difusion.Checked = Configuration.enable_server;
+            chk_enable_compress.Checked = Configuration.compress_video;
+            chk_date_time.Checked = Configuration.show_date_time;
+            cmb_font.Text = Configuration.font.Size.ToString();
+            SetAlign(Configuration.legend_align);
         }
 
         #region Submit
         private void btn_ok_config_Click(object sender, EventArgs e)
         {
             //aply values
-            Configuration.Data.PathSaveVideo = GetPath(txt_dir.Text);
-            Configuration.Data.TimeInterval = bar_timer.Value;
-            Configuration.Data.FrameRate = bar_frame_rate.Value;
-            Configuration.Data.BitRate = bar_bit_rate.Value * 1000;
-            Configuration.Data.EnableInterval = chk_enable_timer.Checked;
-            Configuration.Data.EnableServer = chk_web_difusion.Checked;
-            Configuration.Data.EnableCompressVideo = chk_enable_compress.Checked;
-            Configuration.Data.ViewDateTime = chk_date_time.Checked;
-            Configuration.Data.Font = new Font(Configuration.Data.Font.FontFamily, Convert.ToInt32(cmb_font.Text));
-            Configuration.Data.LegendAlign = GetAlign();
+            Configuration.path_save_video = GetPath(txt_dir.Text);
+            Configuration.time_interval = bar_timer.Value;
+            Configuration.frame_rate = bar_frame_rate.Value;
+            Configuration.bit_rate = bar_bit_rate.Value * 1000;
+            Configuration.enable_interval = chk_enable_timer.Checked;
+            Configuration.enable_server = chk_web_difusion.Checked;
+            Configuration.compress_video = chk_enable_compress.Checked;
+            Configuration.show_date_time = chk_date_time.Checked;
+            Configuration.font = new Font(Configuration.font.FontFamily, Convert.ToInt32(cmb_font.Text));
+            Configuration.legend_align = GetAlign();
 
             //finish
             save = true;
@@ -82,7 +82,7 @@ namespace CapturaVideo
 
             //aplly values
             if(!chk_enable_timer.Checked)
-                bar_timer.Value = Configuration.Data.TimeInterval;
+                bar_timer.Value = Configuration.time_interval;
         }
         #endregion
 
@@ -104,46 +104,46 @@ namespace CapturaVideo
 
             //aplly values
             if (!chk_date_time.Checked){
-                cmb_font.Text = Configuration.Data.Font.Size.ToString();
-                SetAlign(Configuration.Data.LegendAlign);
+                cmb_font.Text = Configuration.font.Size.ToString();
+                SetAlign(Configuration.legend_align);
             }
         }
         #endregion
 
         #region Legend Align
-        public void SetAlign(ELegendAlign align)
+        public void SetAlign(LegendAlign align)
         {
-            chk_top_left.Checked = align == ELegendAlign.TopLeft;
-            chk_top_right.Checked = align == ELegendAlign.TopRight;
-            chk_botton_left.Checked = align == ELegendAlign.BottonLeft;
-            chk_botton_right.Checked = align == ELegendAlign.BottonRight;
+            chk_top_left.Checked = align == LegendAlign.TopLeft;
+            chk_top_right.Checked = align == LegendAlign.TopRight;
+            chk_botton_left.Checked = align == LegendAlign.BottonLeft;
+            chk_botton_right.Checked = align == LegendAlign.BottonRight;
         }
-        public ELegendAlign GetAlign()
+        public LegendAlign GetAlign()
         {
             if (chk_top_left.Checked)
-                return ELegendAlign.TopLeft;
+                return LegendAlign.TopLeft;
             if (chk_top_right.Checked)
-                return ELegendAlign.TopRight;
+                return LegendAlign.TopRight;
             if (chk_botton_left.Checked)
-                return ELegendAlign.BottonLeft;
+                return LegendAlign.BottonLeft;
 
-            return ELegendAlign.BottonRight;
+            return LegendAlign.BottonRight;
         }
         private void chk_top_left_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.TopLeft);
+            SetAlign(LegendAlign.TopLeft);
         }
         private void chk_top_right_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.TopRight);
+            SetAlign(LegendAlign.TopRight);
         }
         private void chk_botton_right_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.BottonRight);
+            SetAlign(LegendAlign.BottonRight);
         }
         private void chk_botton_left_Click(object sender, EventArgs e)
         {
-            SetAlign(ELegendAlign.BottonLeft);
+            SetAlign(LegendAlign.BottonLeft);
         }
         #endregion
 

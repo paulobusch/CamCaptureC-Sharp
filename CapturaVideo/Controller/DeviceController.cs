@@ -1,6 +1,4 @@
 ﻿using CapturaVideo.Model;
-using CapturaVideo.Model.Dtos;
-using CapturaVideo.Model.Enums;
 using DirectX.Capture;
 using System;
 using System.Collections.Generic;
@@ -41,12 +39,11 @@ namespace CapturaVideo.Model
             devices = new List<Filter>();
 
             //check infraestructure
-            //new SqLite().CreateTablesIfNotExists();
+             new SqLite().CreateTablesIfNotExists();
 
             //define devices
-            var filtro = new Filters();
             Configuration.LoadConfiguration();
-            foreach (Filter cam in filtro.VideoInputDevices)
+            foreach (Filter cam in new Filters().VideoInputDevices)
                 devices.Add(cam);
 
             //init controls interface
@@ -60,7 +57,7 @@ namespace CapturaVideo.Model
             //start services
             try
             {
-                if (Configuration.Data.EnableServer)
+                if (Configuration.enable_server)
                     ServerHttpListener.StratThread();
                 else
                     ServerHttpListener.StopThread();
@@ -74,32 +71,32 @@ namespace CapturaVideo.Model
 
 
             //link
-            lbl_link.Visible = Configuration.Data.EnableServer;
+            lbl_link.Visible = Configuration.enable_server;
 
             //update device
             IterateDevices(x => x.Value.UpdateConfiguration());
 
             //timer interval
-            if (Configuration.Data.EnableInterval) {
+            if (Configuration.enable_interval) {
                     StartAllDevices();
                     StartAllVideo();
             }
 
             timer_video_interval.Enabled = false;
-            timer_video_interval.Interval = (Configuration.Data.TimeInterval * 60000);
-            timer_video_interval.Enabled = Configuration.Data.EnableInterval;
+            timer_video_interval.Interval = (Configuration.time_interval * 60000);
+            timer_video_interval.Enabled = Configuration.enable_interval;
         }
         public static void RestoreDevicesConfiguration() {
-            foreach (var cam in Configuration.Data.Devices)
+            foreach (KeyValuePair<string, Size> cam in Configuration.devices_config)
             {
                 //aplly values interface
-                var info = devices.Find(x => x.MonikerString == cam.MonikerString);
+                var info = devices.Find(x => x.MonikerString == cam.Key);
                 try
                 {
                     if (info != null)
                     {
                         device_interface.info = info;
-                        device_interface.resolution = cam.Size;
+                        device_interface.resolution = cam.Value;
 
                         NewDevice();
                     }
@@ -111,14 +108,13 @@ namespace CapturaVideo.Model
                 }
             }
         }
-        public static IEnumerable<DeviceDto> BindDeviceConfiguration()
+        public static Dictionary<string, Size> BindDeviceConfiguration()
         {
-            foreach(var device in devices_capture) { 
-                yield return new DeviceDto() {
-                    MonikerString = device.Value.device.info.MonikerString,
-                    Size = device.Value.device.resolution
-                };
-            };
+            var devices_config = new Dictionary<string, Size>();
+            IterateDevices(x => {
+                devices_config.Add(x.Value.device.info.MonikerString, x.Value.device.resolution);
+            });
+            return devices_config;
         }
         #endregion
 
@@ -149,13 +145,13 @@ namespace CapturaVideo.Model
 
             LoadDevice();
         }
-        public static void ChangeAllIconState(EDeviceState st)
+        public static void ChangeAllIconState(DeviceState st)
         {
             var stInt = (int)st;
             foreach (ListViewItem item in list_view_devices.Items)
                 item.ImageIndex = stInt;
         }
-        public static void ChangeIconState(int key, EDeviceState st)
+        public static void ChangeIconState(int key, DeviceState st)
         {
             foreach (ListViewItem item in list_view_devices.Items)
             {
@@ -175,10 +171,10 @@ namespace CapturaVideo.Model
                 foreach (KeyValuePair<int, DeviceCapture> dev in devices_capture)
                     task(dev);
         }
-        public static EDeviceState GetStateCurrentDevice()
+        public static DeviceState GetStateCurrentDevice()
         {
             var dev = GetDevice(selected_device);
-            return dev?.GetDeviceState() ?? EDeviceState.Stoped;
+            return dev?.GetDeviceState() ?? DeviceState.Stoped;
         }
         public static DeviceCapture GetDevice(int key) {
             DeviceCapture ret;
@@ -194,12 +190,12 @@ namespace CapturaVideo.Model
         }
         public static void StartAllDevices() {
             IterateDevices(x => x.Value.StartDevice());
-            ChangeAllIconState(EDeviceState.Runing);
+            ChangeAllIconState(DeviceState.Runing);
         }
         public static void StopAllDevices(bool refreshIcons = true) {
             IterateDevices(x => x.Value.StopDevice());
             if(refreshIcons)
-                ChangeAllIconState(EDeviceState.Stoped);
+                ChangeAllIconState(DeviceState.Stoped);
         }
         public static void LoadDevice()
         {
@@ -246,15 +242,15 @@ namespace CapturaVideo.Model
                 x.Value.StopVideo();
                 x.Value.StartVideo();
             });
-            ChangeAllIconState(EDeviceState.Recording);
+            ChangeAllIconState(DeviceState.Recording);
         }
         public static void StartAllVideo() {
             IterateDevices(x => x.Value.StartVideo());
-            ChangeAllIconState(EDeviceState.Recording);
+            ChangeAllIconState(DeviceState.Recording);
         }
         public static void StopAllVideo() {
             IterateDevices(x => x.Value.StopVideo());
-            ChangeAllIconState(EDeviceState.Runing);
+            ChangeAllIconState(DeviceState.Runing);
         }
         #endregion
 
@@ -290,7 +286,6 @@ namespace CapturaVideo.Model
             var new_key = devices_capture.Count > 0 ? devices_capture.Keys.Max() + 1 : 1;
             lock(devices_capture)
                 devices_capture.Add(new_key, new DeviceCapture() { key = new_key, device = device_interface.Clone() });
-            Configuration.Data.State = EDbState.Update;
             GetDevice(new_key).ReserveDevice();
             selected_device = new_key;
             FillListView();
@@ -301,7 +296,6 @@ namespace CapturaVideo.Model
             {
                 var key = (int)list_view_devices.SelectedItems[0].Tag;
                 GetDevice(key).device = device_interface.Clone();
-                Configuration.Data.State = EDbState.Update;
                 FillListView();
             }   
         }
@@ -315,7 +309,6 @@ namespace CapturaVideo.Model
                 GetDevice(key).RestoreDevice();
                 lock(devices_capture)
                     devices_capture.Remove(key);
-                Configuration.Data.State = EDbState.Update;
                 FillListView();
             }
         }
