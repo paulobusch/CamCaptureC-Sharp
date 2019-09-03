@@ -5,14 +5,17 @@ Installer/
 packages/
 SetupInstaller/
 
-CapturaVideo/obj/
-CapturaVideo/bin/
+MultiCam.App/bin/
+MultiCam.App/obj/
+
+MultiCam.Domain/bin/
+MultiCam.Domain/obj/
+
+MultiCam.UnitTests/bin/
+MultiCam.UnitTests/obj/
 
 DShowNET/bin/
 DShowNET/obj/
 
 DirectX.Capture/bin/
 DirectX.Capture/obj/
-
-MultiCam.UnitTests/bin/
-MultiCam.UnitTests/obj/
