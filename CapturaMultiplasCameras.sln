@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiCam", "CapturaVideo\MultiCam.csproj", "{6B785CC7-FC00-454F-9A73-847C9BD11908}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectX.Capture", "DirectX.Capture\DirectX.Capture.csproj", "{8C0015DB-69E1-46E7-8705-3A4F8BE2E5E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DShowNET", "DShowNET\DShowNET.csproj", "{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}"
@@ -12,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiCam.UnitTests", "MultiCam.UnitTests\MultiCam.UnitTests.csproj", "{9CB47949-EE94-4012-9315-172F86C9AEE2}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupInstaller", "SetupInstaller\SetupInstaller.vdproj", "{D0FC4ECC-E797-4DC5-8533-DAC89E8FE981}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiCam.Domain", "MultiCam.Domain\MultiCam.Domain.csproj", "{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiCam.App", "MultiCam.App\MultiCam.App.csproj", "{6B785CC7-FC00-454F-9A73-847C9BD11908}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|x86.ActiveCfg = Debug|x86
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|x86.Build.0 = Debug|x86
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|x86.ActiveCfg = Release|x86
-		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|x86.Build.0 = Release|x86
 		{8C0015DB-69E1-46E7-8705-3A4F8BE2E5E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C0015DB-69E1-46E7-8705-3A4F8BE2E5E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C0015DB-69E1-46E7-8705-3A4F8BE2E5E7}.Debug|x86.ActiveCfg = Debug|x86
@@ -57,12 +51,28 @@ Global
 		{D0FC4ECC-E797-4DC5-8533-DAC89E8FE981}.Debug|x86.ActiveCfg = Debug
 		{D0FC4ECC-E797-4DC5-8533-DAC89E8FE981}.Release|Any CPU.ActiveCfg = Release
 		{D0FC4ECC-E797-4DC5-8533-DAC89E8FE981}.Release|x86.ActiveCfg = Release
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Debug|x86.Build.0 = Debug|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E9B2D9C-3575-48CB-BCEC-E5F4941B4210}.Release|x86.Build.0 = Release|Any CPU
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|x86.ActiveCfg = Debug|x86
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Debug|x86.Build.0 = Debug|x86
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|x86.ActiveCfg = Release|x86
+		{6B785CC7-FC00-454F-9A73-847C9BD11908}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 		SolutionGuid = {72DCA3C1-8BBC-48C2-8E2A-B05E72535938}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 EndGlobal
