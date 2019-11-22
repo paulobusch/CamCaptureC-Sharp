@@ -1,27 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 
-using MultiCam.DataContext;
-using MultiCam.Model.Entities;
+using MultiCam.Domain.DataContext;
+using MultiCam.Domain.Entities;
 
-namespace MultiCam.Repository
+namespace MultiCam.Domain.Repository
 {
-    public interface IDeviceRepository
-    {
-        Device GetById(int id);
-        IEnumerable<Device> GetAll();
-        IEnumerable<Device> Find(Func<Device, bool> predicate);
-
-        void Insert(Device device);
-        void Delete(int id);
-
-        void Update(Device device);
-    }
-    public class DeviceRepository : IDeviceRepository
+    public class DeviceRepository : IRepository<Device>
     {
         private readonly IContextDb _context;
 
@@ -29,7 +18,7 @@ namespace MultiCam.Repository
             _context = context;
         }
 
-        public void Insert(Device entity)
+        public async Task InsertAsync(Device entity)
         {
             var sqlInsert = @"
                 insert into devices(moniker_string,cod_nome,width,height)
@@ -40,28 +29,29 @@ namespace MultiCam.Repository
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                cnn.Execute(sqlInsert, Bind(entity));
+                await cnn.ExecuteAsync(sqlInsert, Bind(entity));
                 entity.Id = cnn.Query<int>(sqlIdent, null).First();
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var sql = @"delete from devices where id=@Id";
 
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                cnn.Execute(sql, new { Id = id });
+                await cnn.ExecuteAsync(sql, new { Id = id });
             }
         }
 
-        public IEnumerable<Device> Find(Func<Device, bool> predicate)
+        public async Task<IEnumerable<Device>> FindAsync(Func<Device, bool> predicate)
         {
-            return GetAll().Where(predicate);
+            var list = await GetAllAsync();
+            return list.Where(predicate);
         }
 
-        public IEnumerable<Device> GetAll()
+        public async Task<IEnumerable<Device>> GetAllAsync()
         {
             var sql = @"
                 select
@@ -72,17 +62,14 @@ namespace MultiCam.Repository
                     device.height as _height
                 from devices device";
             
-            var data = null as IEnumerable<Device>;
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                data = cnn.Query<Device>(sql, null);
+                return await cnn.QueryAsync<Device>(sql, null);
             }
-
-            return data;
         }
 
-        public Device GetById(int id)
+        public async Task<Device> GetByIdAsync(int id)
         {
             var sql = @"
                 select
@@ -94,17 +81,14 @@ namespace MultiCam.Repository
                 from devices device
                 where device.id=@Id";
 
-            var data = null as Device;
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                data = cnn.Query<Device>(sql, new { Id = id }).FirstOrDefault();
+                return await cnn.QueryFirstAsync<Device>(sql, new { Id = id });
             }
-
-            return data;
         }
 
-        public void Update(Device entity)
+        public async Task UpdateAsync(Device entity)
         {
             var sql = @"
                 update devices set
@@ -117,7 +101,7 @@ namespace MultiCam.Repository
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                cnn.Execute(sql, Bind(entity));
+                await cnn.ExecuteAsync(sql, Bind(entity));
             }
         }
 

@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 using Accord.Video.FFMPEG;
 using System.IO;
+using MultiCam.Domain;
 
 namespace MultiCam.Model
 {

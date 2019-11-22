@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Linq;
 
 using MultiCam.Logger.Controller;
-using MultiCam.Model;
-using System.Drawing;
-using System.Reflection;
+using MultiCam.Domain;
 
 namespace MultiCam.Controller
 {

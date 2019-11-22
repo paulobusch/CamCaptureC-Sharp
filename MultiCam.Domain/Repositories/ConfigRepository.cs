@@ -3,24 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 
-using MultiCam.Config.Model.Dtos;
-using MultiCam.DataContext;
+using MultiCam.Domain.DataContext;
+using MultiCam.Domain.Entities;
 
-namespace MultiCam.Config.Repository
+namespace MultiCam.Domain.Repository
 {
-    public interface IConfigRepository {
-        Configuration GetById(int id);
-        IEnumerable<Configuration> GetAll();
-        IEnumerable<Configuration> Find(Func<Configuration, bool> predicate);
-
-        void Insert(Configuration config);
-        void Delete(int id);
-
-        void Update(Configuration config);
-    }
-    public class ConfigRepository : IConfigRepository
+    public class ConfigRepository : IRepository<Configuration>
     {
         private readonly IContextDb _context;
 
@@ -29,10 +20,10 @@ namespace MultiCam.Config.Repository
 
             if (!_context.DatabaseExists()) { 
                 _context.CreateDatabase();
-                Insert(new Configuration());
+                InsertAsync(new Configuration()).Wait();
             }
         }
-        public void Insert(Configuration entity)
+        public async Task InsertAsync(Configuration entity)
         {
             var sqlInsert = @"
                 insert into configuration(time_interval,
@@ -51,28 +42,29 @@ namespace MultiCam.Config.Repository
                 using (var command = new SQLiteCommand(sqlInsert, cnn))
                 {
                     cnn.Open();
-                    cnn.Execute(sqlInsert, Bind(entity));
+                    await cnn.ExecuteAsync(sqlInsert, Bind(entity));
                     entity.Id = cnn.Query<int>(sqlIdent, null).First();
                 }
             }
         }
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var sql = @"delete from configuration where id=@Id";
 
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                cnn.Execute(sql, new { Id = id });
+                await cnn.ExecuteAsync(sql, new { Id = id });
             }
         }
 
-        public IEnumerable<Configuration> Find(Func<Configuration, bool> predicate)
+        public async Task<IEnumerable<Configuration>> FindAsync(Func<Configuration, bool> predicate)
         {
-            return GetAll().Where(predicate);
+            var list = await GetAllAsync();
+            return list.Where(predicate);
         }
 
-        public IEnumerable<Configuration> GetAll()
+        public async Task<IEnumerable<Configuration>> GetAllAsync()
         {
             var sql = @"
                 select 
@@ -94,17 +86,14 @@ namespace MultiCam.Config.Repository
                     config.separate_registers_cameras as SeparateRegistersCameras
                 from configuration config";
 
-            var data = null as IEnumerable<Configuration>;
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                data = cnn.Query<Configuration>(sql, null);
+                return await cnn.QueryAsync<Configuration>(sql, null);
             }
-
-            return data;
         }
 
-        public Configuration GetById(int id)
+        public async Task<Configuration> GetByIdAsync(int id)
         {
             var sql = @"
                 select 
@@ -127,17 +116,14 @@ namespace MultiCam.Config.Repository
                 from configuration config
                 where config.id=@Id";
 
-            var data = null as Configuration;
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                data = cnn.Query<Configuration>(sql, new { Id = id }).FirstOrDefault();
+                return await cnn.QueryFirstAsync<Configuration>(sql, new { Id = id });
             }
-
-            return data;
         }
 
-        public void Update(Configuration entity)
+        public async Task UpdateAsync(Configuration entity)
         {
             var sql = @"
                 update configuration set
@@ -161,7 +147,7 @@ namespace MultiCam.Config.Repository
             using (var cnn = _context.NewConnection())
             {
                 cnn.Open();
-                cnn.Execute(sql, Bind(entity));
+                await cnn.ExecuteAsync(sql, Bind(entity));
             }
         }
 

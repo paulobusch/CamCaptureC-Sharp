@@ -1,4 +1,4 @@
-﻿namespace MultiCam.Model.Enums {
+﻿namespace MultiCam.Domain.Enums {
     public enum ELegendAlign {
         TopRight = 0,
         TopLeft = 1,

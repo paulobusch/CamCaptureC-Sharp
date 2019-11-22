@@ -1,12 +1,10 @@
 ﻿using System.Drawing;
-using System.Collections.Generic;
 
-using MultiCam.Model.Enums;
-using MultiCam.Model.Dtos;
-using MultiCam.Model;
-using MultiCam.DataContext;
+using MultiCam.Domain.Enums;
+using MultiCam.Domain.DataContext;
 
-namespace MultiCam.Config.Model.Dtos{
+namespace MultiCam.Domain.Entities
+{
     public class Configuration : EntityBase {
         public int TimeInterval { get; set; }
         public bool EnableInterval { get; set; }

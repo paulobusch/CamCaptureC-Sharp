@@ -7,10 +7,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-using MultiCam.Controller;
-using MultiCam.Model.Entities;
 using MultiCam.Model.Enums;
+using MultiCam.Controller;
 using MultiCam.Notify.Controller;
+using MultiCam.Domain.Entities;
+using MultiCam.Domain;
 
 namespace MultiCam.Model
 {

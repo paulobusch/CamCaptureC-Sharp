@@ -3,19 +3,22 @@ using System.Linq;
 using DirectX.Capture;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
 
 using MultiCam.View;
 using MultiCam.Model;
 using MultiCam.Model.Enums;
+
 using MultiCam.Server.Controller;
 using MultiCam.Config.Controller;
-using MultiCam.Config.Model.Dtos;
 using MultiCam.Notify.Controller;
-using MultiCam.Info.Controller;
-using System.Drawing.Imaging;
-using MultiCam.DataContext;
 using MultiCam.Grid.Controller;
-using MultiCam.Repository;
+using MultiCam.Info.Controller;
+
+using MultiCam.Domain.Entities;
+using MultiCam.Domain.Repository;
+using MultiCam.Domain;
+using System.Threading.Tasks;
 
 namespace MultiCam.Controller
 {
@@ -35,36 +38,36 @@ namespace MultiCam.Controller
         /// <summary>
         /// Update config defined
         /// </summary>
-        void ApplyContext();
+        Task ApplyContext();
 
         /// <summary>
         /// Save context config
         /// </summary>
-        void SaveConfig();
+        Task SaveConfig();
 
         /// <summary>
         /// Define view
         /// </summary>
         /// <param name="view">View by controll</param>
-        void SetView(IMultipleCaptureView view);
+        Task SetView(IMultipleCaptureView view);
 
         /// <summary>
         /// Update device
         /// </summary>
         /// <param name="videoCapture">Instance to update</param>
-        void SaveDevice(VideoCapture videoCapture);
+        Task SaveDevice(VideoCapture videoCapture);
 
         /// <summary>
         /// Create new device
         /// </summary>
         /// <param name="videoCapture">Device by create</param>
-        void NewDevice(VideoCapture videoCapture);
+        Task NewDevice(VideoCapture videoCapture);
 
         /// <summary>
         /// Delete by key id
         /// </summary>
         /// <param name="id">Device key</param>
-        void RemoveDevice(int id);
+        Task RemoveDevice(int id);
 
         /// <summary>
         /// Run device by key
@@ -176,7 +179,7 @@ namespace MultiCam.Controller
     /// <summary>
     /// Control all aplication running
     /// </summary>
-    public class AppController : EntityBase, IAppController
+    public class AppController : IAppController
     {
         public Configuration Config { get; set; }
         public int CurrentVideoCapture { get; set; }
@@ -186,7 +189,7 @@ namespace MultiCam.Controller
         private readonly IAboutController _about;
         private readonly IGridController _grid;
 
-        private readonly IDeviceRepository _deviceRepository;
+        private readonly IRepository<Device> _deviceRepository;
 
         private IEnumerable<Filter> _devices;
         private IEnumerable<VideoCapture> _videosCapture;
@@ -205,7 +208,7 @@ namespace MultiCam.Controller
             IConfigController config,
             IAboutController about,
             IGridController grid,
-            IDeviceRepository deviceRepository
+            IRepository<Device> deviceRepository
         )
         {
             this._notify = notify;
@@ -227,14 +230,14 @@ namespace MultiCam.Controller
         /// Define View to controll
         /// </summary>
         /// <param name="view">View by controll</param>
-        public void SetView(IMultipleCaptureView view)
+        public async Task SetView(IMultipleCaptureView view)
         {
             _view = view;
             
             _devices = new Filters().VideoInputDevices.OfType<Filter>();
             
-            _videosCapture = _deviceRepository
-                .GetAll()
+            var devices = await _deviceRepository.GetAllAsync();
+            _videosCapture = devices
                 .Select(x => {
                     _devices = _devices.Where(d => d.MonikerString != x.MonikerString);
                     return new VideoCapture(new Filter(x.MonikerString))
@@ -252,13 +255,13 @@ namespace MultiCam.Controller
             _view.FillListResolutions(Consts.RESOLUTION);
             _view.FillGridDevices(_videosCapture);
 
-            ApplyContext();
+            await ApplyContext();
         }
         
         #region Configuration
-        public void ApplyContext()
+        public async Task ApplyContext()
         {
-            Config = _config.Load();
+            Config = await _config.LoadAsync();
 
             // Services
             try
@@ -287,7 +290,7 @@ namespace MultiCam.Controller
             
             _view.UpdateConfig();
         }
-        public void SaveConfig() => _config.Save(Config);
+        public async Task SaveConfig() => await _config.Save(Config);
         public EDeviceState GetStateCurrentDevice()
         {
             if((_videosCapture?.Count() ?? 0) == 0 || CurrentVideoCapture == 0)
@@ -335,20 +338,20 @@ namespace MultiCam.Controller
             _videosCapture.First(v => v.Id == id).StopDevice();
         }
 
-        public void NewDevice(VideoCapture videoCapture)
+        public async Task NewDevice(VideoCapture videoCapture)
         {
-            _deviceRepository.Insert(videoCapture);
+            await _deviceRepository.InsertAsync(videoCapture);
             _videosCapture = _videosCapture.Concat(new[] { videoCapture });
             _devices = _devices.Where(x => x.MonikerString != videoCapture.MonikerString);
             CurrentVideoCapture = videoCapture.Id;
             _view.AppendItemGridDevices(videoCapture.Subscribe(_view));
             _view.FillListDevices(_devices);
         }
-        public void SaveDevice(VideoCapture videoCapture)
+        public async Task SaveDevice(VideoCapture videoCapture)
         {
             var _videoCapture = _videosCapture.First(x => x.Id == videoCapture.Id);
 
-            _deviceRepository.Update(videoCapture);
+            await _deviceRepository.UpdateAsync(videoCapture);
             _devices = _devices.Concat(new[] { _videoCapture.Info });
             _devices = _devices.Where(x => x.MonikerString != videoCapture.MonikerString);
             _videoCapture.Info = videoCapture.Info;
@@ -359,9 +362,9 @@ namespace MultiCam.Controller
             _view.FillListDevices(_devices);
             _view.SetDevice(videoCapture);
         }
-        public void RemoveDevice(int id)
+        public async Task RemoveDevice(int id)
         {
-            _deviceRepository.Delete(id);
+            await _deviceRepository.DeleteAsync(id);
             _videosCapture.First(v => v.Id == id).Unsubscribe(_view).StopDevice();
             _devices = _devices.Concat(new []{ _videosCapture.First(v => v.Id == id).Info });
             _videosCapture = _videosCapture.Where(v => v.Id != id);

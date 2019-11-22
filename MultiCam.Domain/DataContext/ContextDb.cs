@@ -1,10 +1,7 @@
-﻿using System.Data;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using System.IO;
 
-using MultiCam.Model;
-
-namespace MultiCam.DataContext{
+namespace MultiCam.Domain.DataContext {
     /// <summary>
     /// Database Context interface
     /// </summary>

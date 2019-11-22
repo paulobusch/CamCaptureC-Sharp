@@ -4,9 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 
 using MultiCam.Config.Controller;
-using MultiCam.Config.Model.Dtos;
-using MultiCam.Model;
-using MultiCam.Model.Enums;
+using MultiCam.Domain;
+using MultiCam.Domain.Entities;
+using MultiCam.Domain.Enums;
 
 namespace MultiCam.Config.View
 {
@@ -29,7 +29,7 @@ namespace MultiCam.Config.View
             InitFonts();
 
             //load config interface
-            _config = controller.Load();
+            _config = controller.LoadAsync().Result;
             txt_dir.Text = _config.PathSaveVideo;
             bar_timer.Value = _config.TimeInterval;
             bar_timer.Enabled = _config.EnableInterval;
@@ -64,7 +64,6 @@ namespace MultiCam.Config.View
             _config.SeparateRegistersCameras = chk_separate_registers_cameras.Checked;
             _config.FolderFormat = GetFormat();
             _config.LegendAlign = GetAlign();
-            _config.State = EDbState.Update;
 
             _controller.Save(_config);
 

@@ -1,10 +1,8 @@
 ﻿using System.Drawing;
-using DirectX.Capture;
 
-using MultiCam.DataContext;
-using MultiCam.Model.Enums;
+using MultiCam.Domain.DataContext;
 
-namespace MultiCam.Model.Entities {
+namespace MultiCam.Domain.Entities {
     public class Device : EntityBase {
         public string MonikerString { get; set; }
         public string CodNome { get; set; }

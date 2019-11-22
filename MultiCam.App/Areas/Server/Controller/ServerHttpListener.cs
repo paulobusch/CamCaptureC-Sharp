@@ -6,8 +6,8 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using System.Net.Sockets;
-using MultiCam.Model;
 using MultiCam.Controller;
+using MultiCam.Domain;
 
 namespace MultiCam.Server.Controller
 {

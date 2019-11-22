@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-using MultiCam.Model.Enums;
+using MultiCam.Domain;
+using MultiCam.Domain.Enums;
 
 namespace MultiCam.Model
 {

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Dapper;
 
-using MultiCam.Config.Model.Dtos;
 using MultiCam.Config.View;
-using MultiCam.Model;
-using MultiCam.Model.Dtos;
-using MultiCam.Model.Enums;
 using MultiCam.Notify.Controller;
-using MultiCam.DataContext;
-using MultiCam.Config.Repository;
-using System.Collections.Generic;
+using MultiCam.Domain.Entities;
+using MultiCam.Domain.Repository;
+using System.Threading.Tasks;
 
 namespace MultiCam.Config.Controller
 {
@@ -33,13 +28,13 @@ namespace MultiCam.Config.Controller
         /// Restore configuration by application
         /// </summary>
         /// <returns>The method return an instance ConfigurationDto</returns>
-        Configuration Load();
+        Task<Configuration> LoadAsync();
 
         /// <summary>
         /// Save Configuration application
         /// </summary>
         /// <param name="entity">Instance Configuration</param>
-        void Save(Configuration entity);
+        Task Save(Configuration entity);
     }
 
     /// <summary>
@@ -47,7 +42,7 @@ namespace MultiCam.Config.Controller
     /// </summary>
     public class ConfigController : IConfigController
     {
-        private IConfigRepository _configRepository;
+        private IRepository<Configuration> _configRepository;
         private INotifyController _notify;
         private IConfigView _view;
         
@@ -56,7 +51,7 @@ namespace MultiCam.Config.Controller
         /// </summary>
         public ConfigController(
             INotifyController notify,
-            IConfigRepository configRepository
+            IRepository<Configuration> configRepository
         )
         {
             _notify = notify;
@@ -64,21 +59,22 @@ namespace MultiCam.Config.Controller
         }
         public Form Run() => new ConfigurationForm(this);
         public void SetView(IConfigView view) => _view = view;
-        public Configuration Load()
+        public async Task<Configuration> LoadAsync()
         {
             try
             {
-                return _configRepository.GetAll().FirstOrDefault();
+                var list = await _configRepository.GetAllAsync();
+                return list.FirstOrDefault();
             } catch (Exception){
                 _notify.FailMessage("Falha ao carregar as configurações!");
             }
             return new Configuration();
         }
-        public void Save(Configuration entity)
+        public async Task Save(Configuration entity)
         {
             try
             {
-                _configRepository.Update(entity);
+                await _configRepository.UpdateAsync(entity);
             }
             catch (Exception ex){
                 _notify.FailMessage("Falha ao salvar configurações!");

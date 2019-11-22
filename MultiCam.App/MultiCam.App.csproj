@@ -98,16 +98,12 @@
     <Reference Include="Accord.Video.FFMPEG, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=x86">
       <HintPath>..\packages\Accord.Video.FFMPEG.3.8.0\lib\net45\Accord.Video.FFMPEG.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper, Version=1.30.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.30\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="DShowNET">
       <HintPath>..\DShowNET\bin\Debug\DShowNET.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="ServiceLocator">
       <HintPath>References\ServiceLocator.dll</HintPath>
@@ -129,7 +125,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\App\Model\Dtos\FrameDto.cs" />
-    <Compile Include="Areas\Config\Model\Repository\ConfigRepository.cs" />
     <Compile Include="Areas\Grid\Controller\GridController.cs" />
     <Compile Include="Areas\Grid\View\Grid.cs">
       <SubType>Form</SubType>
@@ -137,16 +132,9 @@
     <Compile Include="Areas\Grid\View\Grid.Designer.cs">
       <DependentUpon>Grid.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataContext\EntityBase.cs" />
-    <Compile Include="Areas\App\Model\Repository\DeviceRepository.cs" />
-    <Compile Include="Areas\Config\Model\Entities\Configuration.cs" />
-    <Compile Include="Areas\App\Model\Entities\Device.cs" />
-    <Compile Include="Areas\App\Model\Enums\EDbState.cs" />
-    <Compile Include="Areas\App\Model\Enums\ELegendAlign.cs" />
     <Compile Include="Areas\Info\Controller\AboutController.cs" />
     <Compile Include="Areas\Notify\View\NotifyView.cs" />
     <Compile Include="Areas\Notify\Controller\NotifyController.cs" />
-    <Compile Include="DataContext\ContextDb.cs" />
     <Compile Include="Areas\Info\View\Info.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,7 +143,6 @@
     </Compile>
     <Compile Include="Areas\App\Model\Dtos\CboItemDto.cs" />
     <Compile Include="Areas\Config\Controller\ConfigController.cs" />
-    <Compile Include="Areas\App\Model\Consts.cs" />
     <Compile Include="Areas\App\Model\VideoCapture.cs" />
     <Compile Include="Areas\App\Controller\AppController.cs" />
     <Compile Include="Areas\App\Model\Enums\EDeviceState.cs" />
@@ -273,6 +260,10 @@
     <ProjectReference Include="..\DirectX.Capture\DirectX.Capture.csproj">
       <Project>{8c0015db-69e1-46e7-8705-3a4f8be2e5e7}</Project>
       <Name>DirectX.Capture</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MultiCam.Domain\MultiCam.Domain.csproj">
+      <Project>{0e9b2d9c-3575-48cb-bcec-e5f4941b4210}</Project>
+      <Name>MultiCam.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

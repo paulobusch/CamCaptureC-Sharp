@@ -1,11 +1,11 @@
 ﻿using MultiCam.Config.Controller;
-using MultiCam.Config.Repository;
 using MultiCam.Controller;
-using MultiCam.DataContext;
+using MultiCam.Domain.DataContext;
+using MultiCam.Domain.Entities;
+using MultiCam.Domain.Repository;
 using MultiCam.Grid.Controller;
 using MultiCam.Info.Controller;
 using MultiCam.Notify.Controller;
-using MultiCam.Repository;
 using ServiceLocatorFramework;
 
 namespace MultiCam
@@ -21,8 +21,8 @@ namespace MultiCam
             Instance.Set<IContextDb>().Implements<SqLite>().SingletonScope();
 
             //Repository
-            Instance.Set<IDeviceRepository>().Implements<DeviceRepository>().SingletonScope();
-            Instance.Set<IConfigRepository>().Implements<ConfigRepository>().SingletonScope();
+            Instance.Set<IRepository<Device>>().Implements<DeviceRepository>().SingletonScope();
+            Instance.Set<IRepository<Configuration>>().Implements<ConfigRepository>().SingletonScope();
             
             //Controllers
             Instance.Set<IAppController>().Implements<AppController>().SingletonScope();
