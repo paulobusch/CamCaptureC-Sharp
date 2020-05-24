@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using CapturaVideo.Model;
 using System.IO;
 using System.Data.SQLite;
 using System.Data;
 using System.Collections.Generic;
+using MultiCam.Domain.DataContext;
 
 namespace MultiCam.UnitTests {
     [TestFixture]

@@ -281,7 +281,7 @@ namespace MultiCam.Controller
                 // Timer
                 if (Config.EnableInterval)
                 {
-                    videoCapture.StartDevice();
+                    videoCapture.StopVideo();
                     videoCapture.StartVideo();
                 }
 

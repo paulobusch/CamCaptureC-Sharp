@@ -1,4 +1,5 @@
-﻿using CapturaVideo.Model;
+﻿using MultiCam.Domain;
+using MultiCam.Domain.DataContext;
 using MultiCam.UnitTests;
 using NUnit.Framework;
 using System.IO;

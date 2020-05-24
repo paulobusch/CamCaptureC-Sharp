@@ -941,9 +941,6 @@
         <member name="F:DirectX.Capture.Filters.VideoInputDevices">
             <summary> Collection of available video capture devices. </summary>
         </member>
-        <member name="F:DirectX.Capture.Filters.AudioInputDevices">
-            <summary> Collection of available audio capture devices. </summary>
-        </member>
         <member name="F:DirectX.Capture.Filters.VideoCompressors">
             <summary> Collection of available video compressors. </summary>
         </member>
